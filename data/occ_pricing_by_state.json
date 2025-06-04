@@ -1,0 +1,391 @@
+{
+  "metadata": {
+    "title": "OCC Baled Cardboard Pricing by US State",
+    "data_period": "December 2024 - January 2025",
+    "currency": "USD per ton",
+    "pricing_basis": "FOB seller's dock",
+    "national_average_range": "66-76",
+    "last_updated": "2025-01-15",
+    "sources": [
+      "Fastmarkets RISI",
+      "Northeast Recycling Council",
+      "RecyclingMarkets.net",
+      "Republic Services earnings reports",
+      "Waste Management company data"
+    ]
+  },
+  "states": {
+    "Alabama": {
+      "price_range_low": 65,
+      "price_range_high": 80,
+      "region": "Southeast",
+      "notes": "Regional mill access with transportation considerations",
+      "key_factors": ["Regional mill demand", "Transportation costs"]
+    },
+    "Alaska": {
+      "price_range_low": 30,
+      "price_range_high": 50,
+      "region": "Western",
+      "notes": "Extreme transportation costs and limited infrastructure (estimated)",
+      "key_factors": ["Extreme isolation", "Limited infrastructure", "High transportation costs"]
+    },
+    "Arizona": {
+      "price_range_low": 55,
+      "price_range_high": 70,
+      "region": "Western",
+      "notes": "Benefits from proximity to Mexican mills creating additional demand",
+      "key_factors": ["Mexican mill competition", "Southwest regional pricing"]
+    },
+    "Arkansas": {
+      "price_range_low": 65,
+      "price_range_high": 80,
+      "region": "Southeast",
+      "notes": "Regional mill access with some transportation challenges",
+      "key_factors": ["Regional mill access", "Transportation considerations"]
+    },
+    "California": {
+      "price_range_low": 40,
+      "price_range_high": 55,
+      "region": "Western",
+      "notes": "High contamination rates (17-50%) and export market dependence create pricing pressure. LA: $40-55/ton, SF: $40-45/ton",
+      "key_factors": ["High contamination rates", "Export market dependence", "Infrastructure challenges"]
+    },
+    "Colorado": {
+      "price_range_low": 45,
+      "price_range_high": 55,
+      "region": "Midwest/Central",
+      "notes": "Denver region with EPR law implementation expected in 2026",
+      "key_factors": ["Central location", "Upcoming EPR legislation", "Limited mill presence"]
+    },
+    "Connecticut": {
+      "price_range_low": 75,
+      "price_range_high": 95,
+      "region": "Northeast",
+      "notes": "Highest regional pricing due to population density, container deposit laws, and strong mill infrastructure",
+      "key_factors": ["High population density", "Container deposit laws", "Strong infrastructure"]
+    },
+    "Delaware": {
+      "price_range_low": 70,
+      "price_range_high": 80,
+      "region": "Northeast",
+      "notes": "Mid-Atlantic advantages with port access",
+      "key_factors": ["Mid-Atlantic location", "Port access"]
+    },
+    "Florida": {
+      "price_range_low": 70,
+      "price_range_high": 85,
+      "region": "Southeast",
+      "notes": "Jacksonville port supporting export opportunities",
+      "key_factors": ["Jacksonville port access", "Export opportunities"]
+    },
+    "Georgia": {
+      "price_range_low": 70,
+      "price_range_high": 85,
+      "region": "Southeast",
+      "notes": "Strategic Southeast positioning with Savannah port access",
+      "key_factors": ["Strategic location", "Savannah port access", "Regional mill demand"]
+    },
+    "Hawaii": {
+      "price_range_low": 20,
+      "price_range_high": 40,
+      "region": "Western",
+      "notes": "Island isolation creating severe economic challenges for recycling (estimated)",
+      "key_factors": ["Island isolation", "Extreme transportation costs", "Limited infrastructure"]
+    },
+    "Idaho": {
+      "price_range_low": 40,
+      "price_range_high": 60,
+      "region": "Western",
+      "notes": "Mountain West served by Pacific Steel & Recycling and Interwest Paper, 500-800 mile transport distances",
+      "key_factors": ["Long transportation distances", "Limited regional mills", "Mountain West challenges"]
+    },
+    "Illinois": {
+      "price_range_low": 50,
+      "price_range_high": 60,
+      "region": "Midwest/Central",
+      "notes": "Chicago area generation with good transportation access",
+      "key_factors": ["Chicago metro area", "Good transportation infrastructure", "Regional processing"]
+    },
+    "Indiana": {
+      "price_range_low": 45,
+      "price_range_high": 60,
+      "region": "Midwest/Central",
+      "notes": "Regional mill access with transportation advantages",
+      "key_factors": ["Regional mill access", "Transportation advantages"]
+    },
+    "Iowa": {
+      "price_range_low": 45,
+      "price_range_high": 55,
+      "region": "Midwest/Central",
+      "notes": "Central location but limited major mill presence",
+      "key_factors": ["Central location", "Limited mill presence"]
+    },
+    "Kansas": {
+      "price_range_low": 40,
+      "price_range_high": 55,
+      "region": "Midwest/Central",
+      "notes": "Waste Management Rolling Meadows MRF serving regional area",
+      "key_factors": ["Regional MRF presence", "Central plains location"]
+    },
+    "Kentucky": {
+      "price_range_low": 75,
+      "price_range_high": 90,
+      "region": "Southeast",
+      "notes": "New Pratt Henderson facility driving increased pricing",
+      "key_factors": ["New Pratt Henderson mill", "Increased local demand"]
+    },
+    "Louisiana": {
+      "price_range_low": 65,
+      "price_range_high": 80,
+      "region": "Southeast",
+      "notes": "Regional mill access with some transportation challenges",
+      "key_factors": ["Regional mill access", "Transportation considerations"]
+    },
+    "Maine": {
+      "price_range_low": 65,
+      "price_range_high": 75,
+      "region": "Northeast",
+      "notes": "Lower Northeast pricing due to transportation costs and rural logistics",
+      "key_factors": ["Rural logistics", "Transportation costs", "Limited mill proximity"]
+    },
+    "Maryland": {
+      "price_range_low": 70,
+      "price_range_high": 80,
+      "region": "Northeast",
+      "notes": "Mid-Atlantic advantages with port access",
+      "key_factors": ["Mid-Atlantic location", "Port access"]
+    },
+    "Massachusetts": {
+      "price_range_low": 75,
+      "price_range_high": 95,
+      "region": "Northeast",
+      "notes": "Highest regional pricing due to population density, container deposit laws, and strong mill infrastructure",
+      "key_factors": ["High population density", "Container deposit laws", "Strong infrastructure"]
+    },
+    "Michigan": {
+      "price_range_low": 50,
+      "price_range_high": 65,
+      "region": "Midwest/Central",
+      "notes": "Graphic Packaging Kalamazoo (500,000 tons annually) driving demand",
+      "key_factors": ["Graphic Packaging Kalamazoo mill", "Regional mill demand"]
+    },
+    "Minnesota": {
+      "price_range_low": 45,
+      "price_range_high": 60,
+      "region": "Midwest/Central",
+      "notes": "Minneapolis-St. Paul processing with rail connections",
+      "key_factors": ["Twin Cities metro", "Rail transportation", "Regional processing"]
+    },
+    "Mississippi": {
+      "price_range_low": 65,
+      "price_range_high": 80,
+      "region": "Southeast",
+      "notes": "Regional mill access with transportation considerations",
+      "key_factors": ["Regional mill access", "Transportation considerations"]
+    },
+    "Missouri": {
+      "price_range_low": 45,
+      "price_range_high": 60,
+      "region": "Midwest/Central",
+      "notes": "Kansas City and St. Louis regions with central location benefits",
+      "key_factors": ["Central location", "Major metro areas", "Transportation advantages"]
+    },
+    "Montana": {
+      "price_range_low": 40,
+      "price_range_high": 60,
+      "region": "Western",
+      "notes": "Mountain West served by Pacific Steel & Recycling and Interwest Paper, 500-800 mile transport distances",
+      "key_factors": ["Long transportation distances", "Limited regional mills", "Mountain West challenges"]
+    },
+    "Nebraska": {
+      "price_range_low": 40,
+      "price_range_high": 50,
+      "region": "Midwest/Central",
+      "notes": "Quality concerns affecting some commercial acceptance",
+      "key_factors": ["Quality/contamination issues", "Limited mill presence"]
+    },
+    "Nevada": {
+      "price_range_low": 40,
+      "price_range_high": 60,
+      "region": "Western",
+      "notes": "Crossroads Paper planning 350,000 tons annually mill near Winnemucca (2025-2027 startup expected to improve pricing)",
+      "key_factors": ["Future Crossroads Paper mill", "Current limited infrastructure", "Expected pricing improvement"]
+    },
+    "New Hampshire": {
+      "price_range_low": 65,
+      "price_range_high": 75,
+      "region": "Northeast",
+      "notes": "Lower Northeast pricing due to transportation costs and rural logistics",
+      "key_factors": ["Rural logistics", "Transportation costs", "Limited mill proximity"]
+    },
+    "New Jersey": {
+      "price_range_low": 75,
+      "price_range_high": 90,
+      "region": "Northeast",
+      "notes": "Strategic location with good mill access and port proximity",
+      "key_factors": ["Strategic location", "Mill access", "Port proximity"]
+    },
+    "New Mexico": {
+      "price_range_low": 55,
+      "price_range_high": 70,
+      "region": "Western",
+      "notes": "Southwest regional pricing with Mexico mill competition",
+      "key_factors": ["Mexican mill competition", "Southwest regional pricing"]
+    },
+    "New York": {
+      "price_range_low": 70,
+      "price_range_high": 85,
+      "region": "Northeast",
+      "notes": "High generation volumes but declining capture rates (48.8% for clean paper/OCC in 2023)",
+      "key_factors": ["High generation volumes", "Declining capture rates", "Infrastructure challenges"]
+    },
+    "North Carolina": {
+      "price_range_low": 70,
+      "price_range_high": 85,
+      "region": "Southeast",
+      "notes": "Strong regional mill demand with established recycling infrastructure",
+      "key_factors": ["Strong regional mill demand", "Established infrastructure"]
+    },
+    "North Dakota": {
+      "price_range_low": 35,
+      "price_range_high": 45,
+      "region": "Midwest/Central",
+      "notes": "Lowest Midwest pricing due to transportation costs to distant mills",
+      "key_factors": ["Remote location", "High transportation costs", "Limited mill access"]
+    },
+    "Ohio": {
+      "price_range_low": 50,
+      "price_range_high": 65,
+      "region": "Midwest/Central",
+      "notes": "Graphic Packaging Middletown and proximity to Pennsylvania mills",
+      "key_factors": ["Graphic Packaging Middletown", "Pennsylvania mill proximity"]
+    },
+    "Oklahoma": {
+      "price_range_low": 65,
+      "price_range_high": 80,
+      "region": "Southeast",
+      "notes": "Regional mill access with some transportation challenges",
+      "key_factors": ["Regional mill access", "Transportation considerations"]
+    },
+    "Oregon": {
+      "price_range_low": 35,
+      "price_range_high": 40,
+      "region": "Western",
+      "notes": "Lowest national pricing following WestRock Tacoma and McKinley Port Angeles mill closures",
+      "key_factors": ["Recent mill closures", "Export market dependence", "Structural overcapacity"]
+    },
+    "Pennsylvania": {
+      "price_range_low": 70,
+      "price_range_high": 85,
+      "region": "Northeast",
+      "notes": "Benefits from planned $125M Empire Recycled Fiber mill (500,000+ tons annually)",
+      "key_factors": ["Planned Empire Recycled Fiber mill", "Strong regional infrastructure"]
+    },
+    "Rhode Island": {
+      "price_range_low": 75,
+      "price_range_high": 95,
+      "region": "Northeast",
+      "notes": "Highest regional pricing due to population density, container deposit laws, and strong mill infrastructure",
+      "key_factors": ["High population density", "Container deposit laws", "Strong infrastructure"]
+    },
+    "South Carolina": {
+      "price_range_low": 65,
+      "price_range_high": 80,
+      "region": "Southeast",
+      "notes": "Charleston port access despite WestRock mill closure in August 2023",
+      "key_factors": ["Charleston port access", "Recent mill closure impact"]
+    },
+    "South Dakota": {
+      "price_range_low": 35,
+      "price_range_high": 45,
+      "region": "Midwest/Central",
+      "notes": "Lowest Midwest pricing due to transportation costs to distant mills",
+      "key_factors": ["Remote location", "High transportation costs", "Limited mill access"]
+    },
+    "Tennessee": {
+      "price_range_low": 75,
+      "price_range_high": 90,
+      "region": "Southeast",
+      "notes": "Domtar Kingsport mill creating strong local demand (400,000 tons annually)",
+      "key_factors": ["Domtar Kingsport mill", "Strong local demand"]
+    },
+    "Texas": {
+      "price_range_low": 70,
+      "price_range_high": 85,
+      "region": "Southeast",
+      "notes": "Houston port driving export pricing premiums",
+      "key_factors": ["Houston port access", "Export opportunities", "Large market size"]
+    },
+    "Utah": {
+      "price_range_low": 45,
+      "price_range_high": 65,
+      "region": "Western",
+      "notes": "Interwest Paper provides regional collection serving 500-mile radius",
+      "key_factors": ["Interwest Paper presence", "500-mile service radius", "Mountain West logistics"]
+    },
+    "Vermont": {
+      "price_range_low": 65,
+      "price_range_high": 75,
+      "region": "Northeast",
+      "notes": "Lower Northeast pricing due to transportation costs and rural logistics",
+      "key_factors": ["Rural logistics", "Transportation costs", "Limited mill proximity"]
+    },
+    "Virginia": {
+      "price_range_low": 70,
+      "price_range_high": 90,
+      "region": "Southeast",
+      "notes": "Benefits from Cascades Bear Island mill (309,000 tons) and strategic mid-Atlantic location for port access",
+      "key_factors": ["Cascades Bear Island mill", "Mid-Atlantic location", "Port access"]
+    },
+    "Washington": {
+      "price_range_low": 35,
+      "price_range_high": 40,
+      "region": "Western",
+      "notes": "Lowest national pricing following WestRock Tacoma (September 2024) and McKinley Port Angeles (August 2024) mill closures",
+      "key_factors": ["Recent mill closures", "Export market dependence", "Structural overcapacity"]
+    },
+    "West Virginia": {
+      "price_range_low": 65,
+      "price_range_high": 75,
+      "region": "Northeast",
+      "notes": "Limited mill proximity affecting pricing",
+      "key_factors": ["Limited mill proximity", "Transportation challenges"]
+    },
+    "Wisconsin": {
+      "price_range_low": 55,
+      "price_range_high": 70,
+      "region": "Midwest/Central",
+      "notes": "Highest Midwest pricing due to ND Paper Biron expansion (800,000+ tons annually) and Green Bay Packaging's new $500M mill (685,000 tons annually)",
+      "key_factors": ["ND Paper Biron expansion", "Green Bay Packaging mill", "Strong mill demand"]
+    },
+    "Wyoming": {
+      "price_range_low": 40,
+      "price_range_high": 60,
+      "region": "Western",
+      "notes": "Mountain West served by Pacific Steel & Recycling and Interwest Paper, 500-800 mile transport distances",
+      "key_factors": ["Long transportation distances", "Limited regional mills", "Mountain West challenges"]
+    }
+  },
+  "regional_summary": {
+    "Southeast": {
+      "average_range": "65-110",
+      "characteristics": "Highest national pricing due to strong mill demand and new capacity additions",
+      "key_drivers": ["New mill capacity", "Export port access", "Regional competition for feedstock"]
+    },
+    "Northeast": {
+      "average_range": "65-95",
+      "characteristics": "Premium pricing supported by infrastructure and population density",
+      "key_drivers": ["Population density", "Container deposit laws", "Strong infrastructure"]
+    },
+    "Midwest/Central": {
+      "average_range": "35-70",
+      "characteristics": "Balanced pricing with good mill presence and transportation",
+      "key_drivers": ["Mill presence", "Transportation infrastructure", "Regional competition"]
+    },
+    "Western": {
+      "average_range": "35-80",
+      "characteristics": "Lowest national pricing due to mill closures and export dependence",
+      "key_drivers": ["Recent mill closures", "Export market volatility", "Transportation distances"]
+    }
+  }
+}
