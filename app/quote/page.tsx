@@ -8,6 +8,7 @@ import { Send, CheckCircle, AlertCircle, Calculator } from "lucide-react";
 import { QuoteFormData } from "@/types";
 import { HeroSection } from "@/components/ui/hero-section";
 import { cn } from "@/lib/utils";
+import { serviceAreas } from "@/lib/data";
 
 const metadata: Metadata = {
   title: "Get Quote",
@@ -339,16 +340,14 @@ export default function QuotePage(): JSX.Element {
                           )}
                         >
                           <option value="">Select state</option>
-                          <option value="CA">California</option>
-                          <option value="TX">Texas</option>
-                          <option value="FL">Florida</option>
-                          <option value="NY">New York</option>
-                          <option value="IL">Illinois</option>
-                          <option value="PA">Pennsylvania</option>
-                          <option value="OH">Ohio</option>
-                          <option value="GA">Georgia</option>
-                          <option value="NC">North Carolina</option>
-                          <option value="MI">Michigan</option>
+                          {serviceAreas
+                            .filter((area) => area.active)
+                            .sort((a, b) => a.state.localeCompare(b.state))
+                            .map((area) => (
+                              <option key={area.state} value={area.state}>
+                                {area.state}
+                              </option>
+                            ))}
                         </select>
                         {errors.state && (
                           <p className="mt-1 text-sm text-red-600">
