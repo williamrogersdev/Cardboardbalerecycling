@@ -15,6 +15,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { serviceAreas, stateCardboardPricing } from "@/lib/data";
+import { LocalBusinessJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld";
 
 interface CityPageProps {
   params: Promise<{
@@ -141,18 +142,36 @@ export default async function CityPage({ params }: CityPageProps) {
     "Environmental compliance assurance",
   ];
 
+  const priceRange = statePricing
+    ? `$${statePricing.priceRange.min}-$${statePricing.priceRange.max}/ton`
+    : "$70-$120/ton";
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-50 to-white py-16 lg:py-24">
-        <div className="container-max">
-          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <MapPin className="w-6 h-6 text-primary-600" />
-              <span className="text-lg font-semibold text-primary-600">
-                {cityName}, {stateName}
-              </span>
-            </div>
+    <>
+      <LocalBusinessJsonLd
+        city={cityName}
+        state={stateName}
+        priceRange={priceRange}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: "https://cardboardbalerecycling.com" },
+          { name: "Service Areas", url: "https://cardboardbalerecycling.com/service-areas" },
+          { name: stateName, url: `https://cardboardbalerecycling.com/${state}` },
+          { name: cityName, url: `https://cardboardbalerecycling.com/${state}/${city}` },
+        ]}
+      />
+      <div className="min-h-screen bg-white">
+        {/* Hero Section */}
+        <section className="bg-gradient-to-br from-primary-50 to-white py-16 lg:py-24">
+          <div className="container-max">
+            <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <MapPin className="w-6 h-6 text-primary-600" />
+                <span className="text-lg font-semibold text-primary-600">
+                  {cityName}, {stateName}
+                </span>
+              </div>
             <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
               Cardboard Recycling in {cityName}
             </h1>
@@ -404,5 +423,6 @@ export default async function CityPage({ params }: CityPageProps) {
         </div>
       </section>
     </div>
+    </>
   );
 }

@@ -5,24 +5,28 @@ import { HeroSection } from "@/components/ui/hero-section";
 import { ServiceCard } from "@/components/ui/service-card";
 import { ContactForm } from "@/components/ui/contact-form";
 import { serviceOfferings } from "@/lib/data";
+import { ServiceJsonLd } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-  title: "Services",
+  title: "Cardboard Recycling Services - Collection, Processing & Revenue Sharing",
   description:
-    "Comprehensive cardboard bale recycling services including collection, processing, revenue sharing, compliance support, and equipment rental.",
+    "Comprehensive cardboard bale recycling services paying $70-$120/ton. Includes collection, processing, revenue sharing, compliance support, and equipment rental. Free quotes available.",
   keywords: [
     "cardboard bale collection",
     "cardboard processing",
-    "revenue sharing",
-    "equipment rental",
+    "revenue sharing recycling",
+    "baler rental",
     "compliance support",
     "cardboard recycling services",
+    "commercial recycling",
+    "OCC recycling services",
   ],
 };
 
 export default function ServicesPage() {
   return (
     <>
+      <ServiceJsonLd />
       {/* Hero Section */}
       <HeroSection
         subtitle="🚛 Full-Service Solutions"

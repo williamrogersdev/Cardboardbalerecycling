@@ -19,15 +19,17 @@ import { formatCurrency } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Pricing",
+  title: "Cardboard Bale Pricing by State - $70-$120/Ton",
   description:
-    "Current cardboard bale recycling prices by state. View real-time market rates across major US markets, typically $70-120 per ton.",
+    "Current cardboard bale recycling prices by state. National average $95/ton, ranging $70-$120/ton. View real-time market rates for California, Texas, New York, and more.",
   keywords: [
     "cardboard bale pricing",
     "cardboard recycling rates by state",
-    "market prices per ton",
-    "cardboard pricing",
-    "recycling rates",
+    "OCC prices per ton",
+    "cardboard bale prices 2024",
+    "recycling rates by state",
+    "sell cardboard bales price",
+    "corrugated cardboard prices",
   ],
 };
 

@@ -12,17 +12,20 @@ import {
   FileText,
   Calculator,
 } from "lucide-react";
+import { HowToJsonLd } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
   title: "How It Works - Cardboard Bale Recycling Process",
   description:
-    "Learn how our cardboard bale recycling process works. From initial contact to payment, discover how we turn your cardboard waste into revenue.",
+    "Learn how our 4-step cardboard bale recycling process works. From free assessment to payment within 7 days, discover how we turn your cardboard waste into revenue up to $120/ton.",
   keywords: [
     "how cardboard recycling works",
     "cardboard bale process",
     "recycling steps",
     "cardboard pickup process",
     "cardboard waste management",
+    "sell cardboard bales",
+    "cardboard recycling payment",
   ],
 };
 
@@ -118,8 +121,10 @@ const benefits = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
+    <>
+      <HowToJsonLd />
+      <div className="min-h-screen bg-white">
+        {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-50 to-white py-16 lg:py-24">
         <div className="container-max">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
@@ -304,6 +309,7 @@ export default function HowItWorksPage() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

@@ -8,9 +8,13 @@ import { HeroSection } from "@/components/ui/hero-section";
 import { cn } from "@/lib/utils";
 import { serviceAreas } from "@/lib/data";
 
-const API_ENDPOINT = "https://gallant-goshawk-513.convex.site/v1/leads";
-const API_KEY = "1db_ccff5ff01e31a6fe79e30591b2a6a9f8";
-const FORM_SLUG = "cardboard-bale-recycling-contact";
+const API_ENDPOINT =
+  process.env.NEXT_PUBLIC_API_ENDPOINT ||
+  "https://gallant-goshawk-513.convex.site/v1/leads";
+const API_KEY =
+  process.env.NEXT_PUBLIC_API_KEY || "1db_ccff5ff01e31a6fe79e30591b2a6a9f8";
+const FORM_SLUG =
+  process.env.NEXT_PUBLIC_FORM_SLUG || "cardboard-bale-recycling-contact";
 
 // Define form data type with botcheck
 type FormData = QuoteFormData & {
