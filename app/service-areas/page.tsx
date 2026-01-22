@@ -211,7 +211,7 @@ const majorCities = [
   { name: "San Jose, CA", population: "1.0M", businesses: "2,900+" },
 ];
 
-export default function ServiceAreasPage(): JSX.Element {
+export default function ServiceAreasPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}

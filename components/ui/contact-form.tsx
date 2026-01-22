@@ -1,6 +1,5 @@
 "use client";
 
-import useWeb3Forms from "@web3forms/react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
@@ -18,14 +17,15 @@ type FormData = ContactFormData & {
   botcheck: string;
 };
 
+const API_ENDPOINT = "https://gallant-goshawk-513.convex.site/v1/leads";
+const API_KEY = "1db_ccff5ff01e31a6fe79e30591b2a6a9f8";
+const FORM_SLUG = "cardboard-bale-recycling-contact";
+
 export function ContactForm({
   title = "Get In Touch",
   description = "Ready to start recycling? Contact us for a free consultation.",
   className,
-}: ContactFormProps): JSX.Element {
-  // Web3Forms access key
-  const apiKey = "53534de8-540c-4885-9ca4-44cffb30f0f7";
-
+}: ContactFormProps) {
   const {
     register,
     handleSubmit,
@@ -37,24 +37,52 @@ export function ContactForm({
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Setup Web3Forms hook
-  const { submit: onSubmit } = useWeb3Forms({
-    access_key: apiKey,
-    settings: {
-      from_name: "Cardboard Bale Recycling",
-      subject: "New Contact Form Submission",
-    },
-    onSuccess: (msg, _data) => {
+  const onSubmit = async (data: FormData) => {
+    // Check honeypot
+    if (data.botcheck) {
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await fetch(API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Key": API_KEY,
+        },
+        body: JSON.stringify({
+          formSlug: FORM_SLUG,
+          name: data.name,
+          email: data.email,
+          company: data.company || "",
+          message: data.message,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Submission failed");
+      }
+
       setIsSuccess(true);
-      setMessage(msg);
+      setMessage("Thank you! We'll contact you within 24 hours to discuss your recycling needs.");
       reset();
-    },
-    onError: (msg, _data) => {
+    } catch (err) {
       setIsSuccess(false);
-      setMessage(msg);
-    },
-  });
+      setMessage(
+        err instanceof Error
+          ? err.message
+          : "There was an error submitting your form. Please try again or call us directly."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Reset success message after 5 seconds
   useEffect(() => {
@@ -75,23 +103,17 @@ export function ContactForm({
         <p className="text-gray-600">{description}</p>
       </div>
 
-      {isSubmitSuccessful && isSuccess && (
+      {isSuccess && message && (
         <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-2">
           <CheckCircle className="w-5 h-5 text-green-600" />
-          <p className="text-green-700">
-            {message ||
-              "Thank you! We'll contact you within 24 hours to discuss your recycling needs."}
-          </p>
+          <p className="text-green-700">{message}</p>
         </div>
       )}
 
       {!isSuccess && message && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
           <AlertCircle className="w-5 h-5 text-red-600" />
-          <p className="text-red-700">
-            {message ||
-              "There was an error submitting your form. Please try again or call us directly."}
-          </p>
+          <p className="text-red-700">{message}</p>
         </div>
       )}
 
@@ -216,13 +238,13 @@ export function ContactForm({
 
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || loading}
           className={cn(
             "w-full btn-primary justify-center",
-            isSubmitting && "opacity-75 cursor-not-allowed"
+            (isSubmitting || loading) && "opacity-75 cursor-not-allowed"
           )}
         >
-          {isSubmitting ? (
+          {isSubmitting || loading ? (
             <>
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
               Sending...

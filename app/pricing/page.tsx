@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function PricingPage(): JSX.Element {
+export default function PricingPage() {
   return (
     <>
       {/* Hero Section */}

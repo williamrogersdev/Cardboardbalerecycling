@@ -26,7 +26,7 @@ export function HeroSection({
   secondaryCta,
   backgroundImage,
   className,
-}: HeroSectionProps): JSX.Element {
+}: HeroSectionProps) {
   return (
     <section
       className={cn(

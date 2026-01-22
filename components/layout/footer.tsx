@@ -23,7 +23,7 @@ const footerNavigation = {
   ],
 };
 
-export function Footer(): JSX.Element {
+export function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container-max">

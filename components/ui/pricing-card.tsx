@@ -13,7 +13,7 @@ export function PricingCard({
   tier,
   featured = false,
   className,
-}: PricingCardProps): JSX.Element {
+}: PricingCardProps) {
   return (
     <div
       className={cn(

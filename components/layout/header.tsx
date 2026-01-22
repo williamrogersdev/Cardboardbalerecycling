@@ -13,7 +13,7 @@ const navigation = [
   { name: "Resources", href: "/resources" },
 ];
 
-export function Header(): JSX.Element {
+export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (

@@ -18,9 +18,9 @@ import {
 import { serviceAreas, stateCardboardPricing } from "@/lib/data";
 
 interface StatePageProps {
-  params: {
+  params: Promise<{
     state: string;
-  };
+  }>;
 }
 
 function formatStateName(stateSlug: string): string {
@@ -47,7 +47,8 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: StatePageProps): Promise<Metadata> {
-  const stateName = formatStateName(params.state);
+  const { state } = await params;
+  const stateName = formatStateName(state);
 
   return {
     title: `${stateName} Cardboard Bale Recycling - Professional Pickup Services`,
@@ -62,17 +63,18 @@ export async function generateMetadata({
   };
 }
 
-export default function StatePage({ params }: StatePageProps): JSX.Element {
-  const stateName = formatStateName(params.state);
+export default async function StatePage({ params }: StatePageProps) {
+  const { state } = await params;
+  const stateName = formatStateName(state);
 
   // Find state data
   const stateService = serviceAreas.find(
-    (area) => area.state.toLowerCase().replace(/\s+/g, "-") === params.state
+    (area) => area.state.toLowerCase().replace(/\s+/g, "-") === state
   );
 
   const statePricing = stateCardboardPricing.find(
     (pricing) =>
-      pricing.state.toLowerCase().replace(/\s+/g, "-") === params.state
+      pricing.state.toLowerCase().replace(/\s+/g, "-") === state
   );
 
   if (!stateService) {
@@ -238,7 +240,7 @@ export default function StatePage({ params }: StatePageProps): JSX.Element {
               {stateService.cities.map((city, index) => (
                 <Link
                   key={index}
-                  href={`/${params.state}/${formatCitySlug(city)}`}
+                  href={`/${state}/${formatCitySlug(city)}`}
                   className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 group"
                 >
                   <div className="flex items-center gap-3 mb-4">

@@ -116,7 +116,7 @@ const benefits = [
   },
 ];
 
-export default function HowItWorksPage(): JSX.Element {
+export default function HowItWorksPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}

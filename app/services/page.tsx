@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function ServicesPage(): JSX.Element {
+export default function ServicesPage() {
   return (
     <>
       {/* Hero Section */}

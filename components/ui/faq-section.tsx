@@ -17,7 +17,7 @@ export function FAQSection({
   title = "Frequently Asked Questions",
   description = "Find answers to common questions about our cardboard recycling services.",
   className,
-}: FAQSectionProps): JSX.Element {
+}: FAQSectionProps) {
   const [openItems, setOpenItems] = useState<Set<string>>(new Set());
 
   const toggleItem = (id: string): void => {

@@ -17,10 +17,10 @@ import {
 import { serviceAreas, stateCardboardPricing } from "@/lib/data";
 
 interface CityPageProps {
-  params: {
+  params: Promise<{
     state: string;
     city: string;
-  };
+  }>;
 }
 
 function formatStateName(stateSlug: string): string {
@@ -61,8 +61,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: CityPageProps): Promise<Metadata> {
-  const stateName = formatStateName(params.state);
-  const cityName = formatCityName(params.city);
+  const { state, city } = await params;
+  const stateName = formatStateName(state);
+  const cityName = formatCityName(city);
 
   return {
     title: `${cityName}, ${stateName} Cardboard Bale Recycling - Local Pickup Services`,
@@ -77,13 +78,14 @@ export async function generateMetadata({
   };
 }
 
-export default function CityPage({ params }: CityPageProps): JSX.Element {
-  const stateName = formatStateName(params.state);
-  const cityName = formatCityName(params.city);
+export default async function CityPage({ params }: CityPageProps) {
+  const { state, city } = await params;
+  const stateName = formatStateName(state);
+  const cityName = formatCityName(city);
 
   // Find state and city data
   const stateService = serviceAreas.find(
-    (area) => area.state.toLowerCase().replace(/\s+/g, "-") === params.state
+    (area) => area.state.toLowerCase().replace(/\s+/g, "-") === state
   );
 
   if (!stateService) {
@@ -91,7 +93,7 @@ export default function CityPage({ params }: CityPageProps): JSX.Element {
   }
 
   const cityExists = stateService.cities.some(
-    (city) => city.toLowerCase().replace(/\s+/g, "-") === params.city
+    (c) => c.toLowerCase().replace(/\s+/g, "-") === city
   );
 
   if (!cityExists) {
@@ -100,7 +102,7 @@ export default function CityPage({ params }: CityPageProps): JSX.Element {
 
   const statePricing = stateCardboardPricing.find(
     (pricing) =>
-      pricing.state.toLowerCase().replace(/\s+/g, "-") === params.state
+      pricing.state.toLowerCase().replace(/\s+/g, "-") === state
   );
 
   const serviceFeatures = [
@@ -392,7 +394,7 @@ export default function CityPage({ params }: CityPageProps): JSX.Element {
                 Get Free {cityName} Quote
               </Link>
               <Link
-                href={`/${params.state}`}
+                href={`/${state}`}
                 className="border border-primary-300 hover:border-white text-white hover:bg-white hover:text-primary-600 font-semibold py-3 px-8 rounded-lg transition-all duration-200"
               >
                 View {stateName} Services

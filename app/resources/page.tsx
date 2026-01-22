@@ -258,7 +258,7 @@ const educationalContent = [
   },
 ];
 
-export default function ResourcesPage(): JSX.Element {
+export default function ResourcesPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}

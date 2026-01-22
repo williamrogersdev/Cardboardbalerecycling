@@ -10,7 +10,7 @@ interface TestimonialCardProps {
 export function TestimonialCard({
   testimonial,
   className,
-}: TestimonialCardProps): JSX.Element {
+}: TestimonialCardProps) {
   return (
     <div
       className={cn("bg-white rounded-xl p-6 card-shadow relative", className)}

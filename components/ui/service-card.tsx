@@ -32,7 +32,7 @@ export function ServiceCard({
   benefits,
   icon,
   className,
-}: ServiceCardProps): JSX.Element {
+}: ServiceCardProps) {
   const IconComponent = iconMap[icon] || Settings;
 
   return (

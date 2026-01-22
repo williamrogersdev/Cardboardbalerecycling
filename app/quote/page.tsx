@@ -1,7 +1,5 @@
 "use client";
 
-import type { Metadata } from "next";
-import useWeb3Forms from "@web3forms/react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Send, CheckCircle, AlertCircle, Calculator } from "lucide-react";
@@ -10,28 +8,16 @@ import { HeroSection } from "@/components/ui/hero-section";
 import { cn } from "@/lib/utils";
 import { serviceAreas } from "@/lib/data";
 
-const metadata: Metadata = {
-  title: "Get Quote",
-  description:
-    "Get a free quote for cardboard bale recycling services. Calculate your potential revenue and start turning waste into profit.",
-  keywords: [
-    "cardboard recycling quote",
-    "free quote",
-    "cardboard bale pickup",
-    "recycling assessment",
-    "waste management quote",
-  ],
-};
+const API_ENDPOINT = "https://gallant-goshawk-513.convex.site/v1/leads";
+const API_KEY = "1db_ccff5ff01e31a6fe79e30591b2a6a9f8";
+const FORM_SLUG = "cardboard-bale-recycling-contact";
 
 // Define form data type with botcheck
 type FormData = QuoteFormData & {
   botcheck: string;
 };
 
-export default function QuotePage(): JSX.Element {
-  // Web3Forms access key
-  const apiKey = "53534de8-540c-4885-9ca4-44cffb30f0f7";
-
+export default function QuotePage() {
   const {
     register,
     handleSubmit,
@@ -44,27 +30,64 @@ export default function QuotePage(): JSX.Element {
 
   const [isSuccess, setIsSuccess] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const monthlyVolume = watch("monthlyVolume");
   const equipmentNeeds = watch("equipmentNeeds");
 
-  // Setup Web3Forms hook
-  const { submit: onSubmit } = useWeb3Forms({
-    access_key: apiKey,
-    settings: {
-      from_name: "Cardboard Bale Recycling",
-      subject: "New Quote Request",
-    },
-    onSuccess: (msg, _data) => {
+  const onSubmit = async (data: FormData) => {
+    // Check honeypot
+    if (data.botcheck) {
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await fetch(API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-Key": API_KEY,
+        },
+        body: JSON.stringify({
+          formSlug: FORM_SLUG,
+          name: data.name,
+          email: data.email,
+          company: data.company,
+          address: data.address,
+          city: data.city,
+          state: data.state,
+          zipCode: data.zipCode,
+          monthlyVolume: data.monthlyVolume,
+          currentDisposalCost: data.currentDisposalCost || 0,
+          pickupFrequency: data.pickupFrequency,
+          equipmentNeeds: data.equipmentNeeds,
+          specialRequirements: data.specialRequirements || "",
+          message: data.message || "",
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Submission failed");
+      }
+
       setIsSuccess(true);
-      setMessage(msg);
+      setMessage("Thank you for your quote request. Our team will review your information and contact you within 24 hours with a detailed proposal.");
       reset();
-    },
-    onError: (msg, _data) => {
+    } catch (err) {
       setIsSuccess(false);
-      setMessage(msg);
-    },
-  });
+      setMessage(
+        err instanceof Error
+          ? err.message
+          : "There was an error submitting your quote request. Please try again or call us directly."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Reset success message after 5 seconds
   useEffect(() => {
@@ -544,13 +567,13 @@ export default function QuotePage(): JSX.Element {
 
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || loading}
                     className={cn(
                       "w-full btn-primary justify-center text-lg py-4",
-                      isSubmitting && "opacity-75 cursor-not-allowed"
+                      (isSubmitting || loading) && "opacity-75 cursor-not-allowed"
                     )}
                   >
-                    {isSubmitting ? (
+                    {isSubmitting || loading ? (
                       <>
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
                         Submitting Quote Request...

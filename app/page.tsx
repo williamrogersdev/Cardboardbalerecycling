@@ -6,7 +6,7 @@ import { TestimonialCard } from "@/components/ui/testimonial-card";
 import { ContactForm } from "@/components/ui/contact-form";
 import { serviceOfferings, testimonials } from "@/lib/data";
 
-export default function HomePage(): JSX.Element {
+export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
