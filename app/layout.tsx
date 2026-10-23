@@ -3,6 +3,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { HomePageJsonLd } from "@/components/seo/json-ld";
+import { LeadAttribution } from "@/components/lead-attribution";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -116,6 +117,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <LeadAttribution />
       </body>
     </html>
   );

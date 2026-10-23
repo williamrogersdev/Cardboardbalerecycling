@@ -1,20 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Send, CheckCircle, AlertCircle, Calculator } from "lucide-react";
 import { QuoteFormData } from "@/types";
 import { HeroSection } from "@/components/ui/hero-section";
 import { cn } from "@/lib/utils";
 import { serviceAreas } from "@/lib/data";
+import { isValidPhone, newSubmissionId, readAttribution, sendLead } from "@/lib/lead-client";
+import {
+  SMS_CONSENT_TEXT,
+  monthlyVolumeOptions,
+  serviceOptions,
+  timeframeOptions,
+} from "@/lib/lead-options";
 
-const API_ENDPOINT =
-  process.env.NEXT_PUBLIC_API_ENDPOINT ||
-  "https://gallant-goshawk-513.convex.site/v1/leads";
-const API_KEY =
-  process.env.NEXT_PUBLIC_API_KEY || "1db_ccff5ff01e31a6fe79e30591b2a6a9f8";
-const FORM_SLUG =
-  process.env.NEXT_PUBLIC_FORM_SLUG || "cardboard-bale-recycling-contact";
+const FORM_FIELDS: (keyof QuoteFormData)[] = [
+  "firstName",
+  "lastName",
+  "email",
+  "phone",
+  "company",
+  "address",
+  "city",
+  "state",
+  "zipCode",
+  "service",
+  "monthlyVolume",
+  "timeframe",
+  "currentDisposalCost",
+  "pickupFrequency",
+  "specialRequirements",
+  "message",
+  "smsConsent",
+];
+
+const ERROR_MESSAGE =
+  "There was an error submitting your quote request. Please try again or call us directly.";
 
 // Define form data type with botcheck
 type FormData = QuoteFormData & {
@@ -27,6 +49,7 @@ export default function QuotePage() {
     handleSubmit,
     watch,
     reset,
+    setError,
     formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useForm<FormData>({
     mode: "onTouched",
@@ -39,58 +62,47 @@ export default function QuotePage() {
   const monthlyVolume = watch("monthlyVolume");
   const equipmentNeeds = watch("equipmentNeeds");
 
-  const onSubmit = async (data: FormData) => {
-    // Check honeypot
-    if (data.botcheck) {
-      return;
-    }
+  // Made on load, kept across failed tries, renewed after a success.
+  const submissionId = useRef("");
+  const attribution = useRef<Record<string, string>>({});
 
+  useEffect(() => {
+    submissionId.current = newSubmissionId();
+    attribution.current = readAttribution();
+  }, []);
+
+  const onSubmit = async (data: FormData) => {
     setLoading(true);
     setMessage("");
+    if (!submissionId.current) submissionId.current = newSubmissionId();
 
-    try {
-      const response = await fetch(API_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-API-Key": API_KEY,
-        },
-        body: JSON.stringify({
-          formSlug: FORM_SLUG,
-          name: data.name,
-          email: data.email,
-          company: data.company,
-          address: data.address,
-          city: data.city,
-          state: data.state,
-          zipCode: data.zipCode,
-          monthlyVolume: data.monthlyVolume,
-          currentDisposalCost: data.currentDisposalCost || 0,
-          pickupFrequency: data.pickupFrequency,
-          equipmentNeeds: data.equipmentNeeds,
-          specialRequirements: data.specialRequirements || "",
-          message: data.message || "",
-        }),
-      });
+    // A filled honeypot goes to the server too, which answers as for a success.
+    const result = await sendLead(data, submissionId.current, attribution.current);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Submission failed");
-      }
-
+    if (result.kind === "ok") {
       setIsSuccess(true);
       setMessage("Thank you for your quote request. Our team will review your information and contact you within 24 hours with a detailed proposal.");
+      submissionId.current = newSubmissionId();
       reset();
-    } catch (err) {
+    } else {
       setIsSuccess(false);
-      setMessage(
-        err instanceof Error
-          ? err.message
-          : "There was an error submitting your quote request. Please try again or call us directly."
-      );
-    } finally {
-      setLoading(false);
+      if (result.kind === "fields") {
+        let shown = false;
+        for (const name of FORM_FIELDS) {
+          const fieldMessage = result.fields[name];
+          if (fieldMessage) {
+            setError(name, { type: "server", message: fieldMessage });
+            shown = true;
+          }
+        }
+        setMessage(shown ? "Please check the highlighted fields." : ERROR_MESSAGE);
+      } else if (result.kind === "too-many") {
+        setMessage("Too many requests. Please wait a moment and try again.");
+      } else {
+        setMessage(ERROR_MESSAGE);
+      }
     }
+    setLoading(false);
   };
 
   // Reset success message after 5 seconds
@@ -192,6 +204,8 @@ export default function QuotePage() {
                     type="checkbox"
                     className="hidden"
                     style={{ display: "none" }}
+                    tabIndex={-1}
+                    autoComplete="off"
                     {...register("botcheck")}
                   />
 
@@ -204,34 +218,68 @@ export default function QuotePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div>
                         <label
-                          htmlFor="name"
+                          htmlFor="firstName"
                           className="block text-sm font-medium text-gray-700 mb-1"
                         >
-                          Full Name *
+                          First Name *
                         </label>
                         <input
                           type="text"
-                          id="name"
-                          {...register("name", {
-                            required: "Name is required",
+                          id="firstName"
+                          autoComplete="given-name"
+                          {...register("firstName", {
+                            required: "First name is required",
                             maxLength: {
                               value: 80,
-                              message: "Name cannot exceed 80 characters",
+                              message: "First name cannot exceed 80 characters",
                             },
                           })}
                           className={cn(
                             "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
-                            errors.name ? "border-red-300" : "border-gray-300"
+                            errors.firstName ? "border-red-300" : "border-gray-300"
                           )}
-                          placeholder="Your full name"
+                          placeholder="First name"
                         />
-                        {errors.name && (
+                        {errors.firstName && (
                           <p className="mt-1 text-sm text-red-600">
-                            {errors.name.message}
+                            {errors.firstName.message}
                           </p>
                         )}
                       </div>
 
+                      <div>
+                        <label
+                          htmlFor="lastName"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Last Name *
+                        </label>
+                        <input
+                          type="text"
+                          id="lastName"
+                          autoComplete="family-name"
+                          {...register("lastName", {
+                            required: "Last name is required",
+                            maxLength: {
+                              value: 80,
+                              message: "Last name cannot exceed 80 characters",
+                            },
+                          })}
+                          className={cn(
+                            "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
+                            errors.lastName ? "border-red-300" : "border-gray-300"
+                          )}
+                          placeholder="Last name"
+                        />
+                        {errors.lastName && (
+                          <p className="mt-1 text-sm text-red-600">
+                            {errors.lastName.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div>
                         <label
                           htmlFor="email"
@@ -242,6 +290,7 @@ export default function QuotePage() {
                         <input
                           type="email"
                           id="email"
+                          autoComplete="email"
                           {...register("email", {
                             required: "Email is required",
                             pattern: {
@@ -261,6 +310,35 @@ export default function QuotePage() {
                           </p>
                         )}
                       </div>
+
+                      <div>
+                        <label
+                          htmlFor="phone"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          Phone Number *
+                        </label>
+                        <input
+                          type="tel"
+                          id="phone"
+                          autoComplete="tel"
+                          {...register("phone", {
+                            required: "Phone number is required",
+                            validate: (value) =>
+                              isValidPhone(value) || "Please enter a valid phone number",
+                          })}
+                          className={cn(
+                            "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
+                            errors.phone ? "border-red-300" : "border-gray-300"
+                          )}
+                          placeholder="(555) 123-4567"
+                        />
+                        {errors.phone && (
+                          <p className="mt-1 text-sm text-red-600">
+                            {errors.phone.message}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
                     <div>
@@ -275,6 +353,10 @@ export default function QuotePage() {
                         id="company"
                         {...register("company", {
                           required: "Company name is required",
+                          maxLength: {
+                            value: 120,
+                            message: "Company name cannot exceed 120 characters",
+                          },
                         })}
                         className={cn(
                           "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
@@ -308,6 +390,10 @@ export default function QuotePage() {
                         id="address"
                         {...register("address", {
                           required: "Address is required",
+                          maxLength: {
+                            value: 200,
+                            message: "Address cannot exceed 200 characters",
+                          },
                         })}
                         className={cn(
                           "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
@@ -335,6 +421,10 @@ export default function QuotePage() {
                           id="city"
                           {...register("city", {
                             required: "City is required",
+                            maxLength: {
+                              value: 80,
+                              message: "City cannot exceed 80 characters",
+                            },
                           })}
                           className={cn(
                             "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
@@ -426,6 +516,68 @@ export default function QuotePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                       <div>
                         <label
+                          htmlFor="service"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          How Can We Help? *
+                        </label>
+                        <select
+                          id="service"
+                          {...register("service", {
+                            required: "Please choose how we can help",
+                          })}
+                          className={cn(
+                            "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
+                            errors.service ? "border-red-300" : "border-gray-300"
+                          )}
+                        >
+                          <option value="">Select an option</option>
+                          {serviceOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.service && (
+                          <p className="mt-1 text-sm text-red-600">
+                            {errors.service.message}
+                          </p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label
+                          htmlFor="timeframe"
+                          className="block text-sm font-medium text-gray-700 mb-1"
+                        >
+                          When do you need this?
+                        </label>
+                        <select
+                          id="timeframe"
+                          {...register("timeframe")}
+                          className={cn(
+                            "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
+                            errors.timeframe ? "border-red-300" : "border-gray-300"
+                          )}
+                        >
+                          <option value="">Select a timeframe</option>
+                          {timeframeOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.timeframe && (
+                          <p className="mt-1 text-sm text-red-600">
+                            {errors.timeframe.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <label
                           htmlFor="monthlyVolume"
                           className="block text-sm font-medium text-gray-700 mb-1"
                         >
@@ -444,12 +596,11 @@ export default function QuotePage() {
                           )}
                         >
                           <option value="">Select volume range</option>
-                          <option value="2-5">2-5 tons</option>
-                          <option value="5-10">5-10 tons</option>
-                          <option value="10-25">10-25 tons</option>
-                          <option value="25-50">25-50 tons</option>
-                          <option value="50-100">50-100 tons</option>
-                          <option value="100+">100+ tons</option>
+                          {monthlyVolumeOptions.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
                         </select>
                         {errors.monthlyVolume && (
                           <p className="mt-1 text-sm text-red-600">
@@ -474,6 +625,11 @@ export default function QuotePage() {
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                           placeholder="$500"
                         />
+                        {errors.currentDisposalCost && (
+                          <p className="mt-1 text-sm text-red-600">
+                            {errors.currentDisposalCost.message}
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -546,10 +702,20 @@ export default function QuotePage() {
                       <textarea
                         id="specialRequirements"
                         rows={3}
-                        {...register("specialRequirements")}
+                        {...register("specialRequirements", {
+                          maxLength: {
+                            value: 1000,
+                            message: "Special requirements cannot exceed 1000 characters",
+                          },
+                        })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         placeholder="Any special requirements, access restrictions, or additional information..."
                       />
+                      {errors.specialRequirements && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.specialRequirements.message}
+                        </p>
+                      )}
                     </div>
 
                     <div className="mt-4">
@@ -562,11 +728,37 @@ export default function QuotePage() {
                       <textarea
                         id="message"
                         rows={3}
-                        {...register("message")}
+                        {...register("message", {
+                          maxLength: {
+                            value: 2000,
+                            message: "Message cannot exceed 2000 characters",
+                          },
+                        })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                         placeholder="Any questions or additional information..."
                       />
+                      {errors.message && (
+                        <p className="mt-1 text-sm text-red-600">
+                          {errors.message.message}
+                        </p>
+                      )}
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="flex items-start gap-2 text-sm text-gray-700">
+                      <input
+                        type="checkbox"
+                        {...register("smsConsent")}
+                        className="mt-1"
+                      />
+                      {SMS_CONSENT_TEXT}
+                    </label>
+                    {errors.smsConsent && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.smsConsent.message}
+                      </p>
+                    )}
                   </div>
 
                   <button
