@@ -1,20 +1,25 @@
 export interface ContactFormData {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  phone: string;
   company: string;
+  address: string;
+  zipCode: string;
+  service: string;
+  monthlyVolume: string;
+  timeframe: string;
   message: string;
+  smsConsent: boolean;
 }
 
 export interface QuoteFormData extends ContactFormData {
-  monthlyVolume: string;
   currentDisposalCost: number;
   pickupFrequency: "weekly" | "bi-weekly" | "monthly";
   equipmentNeeds: string;
   specialRequirements: string;
-  address: string;
   city: string;
   state: string;
-  zipCode: string;
 }
 
 export interface ServiceArea {

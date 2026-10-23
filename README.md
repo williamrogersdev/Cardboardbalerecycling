@@ -93,10 +93,14 @@ app/
 
 ## Environment Variables
 
-Create a `.env.local` file with:
+The quote and contact forms post to this site's own `/api/leads` route, which
+sends the lead to 1DB from the server. Set these in Vercel (Production and
+Preview) or in `.env.local`. They are server-side only: never give the key a
+`NEXT_PUBLIC_` name, which would put it in the browser bundle.
 
 ```
-NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=8b8f4a2c-3d7e-4f5b-9c1a-2e6d8f9b3c7d
+DB_API_ENDPOINT=https://<1db-host>   # the 1DB base URL, without /v1/leads
+DB_API_KEY=<set in Vercel, server-side only>
 ```
 
 ## Deployment

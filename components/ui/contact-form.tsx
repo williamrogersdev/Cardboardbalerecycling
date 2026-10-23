@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { ContactFormData } from "@/types";
 import { cn } from "@/lib/utils";
+import { isValidPhone, newSubmissionId, readAttribution, sendLead } from "@/lib/lead-client";
+import {
+  SMS_CONSENT_TEXT,
+  monthlyVolumeOptions,
+  serviceOptions,
+  timeframeOptions,
+} from "@/lib/lead-options";
 
 interface ContactFormProps {
   title?: string;
@@ -17,13 +24,29 @@ type FormData = ContactFormData & {
   botcheck: string;
 };
 
-const API_ENDPOINT =
-  process.env.NEXT_PUBLIC_API_ENDPOINT ||
-  "https://gallant-goshawk-513.convex.site/v1/leads";
-const API_KEY =
-  process.env.NEXT_PUBLIC_API_KEY || "1db_ccff5ff01e31a6fe79e30591b2a6a9f8";
-const FORM_SLUG =
-  process.env.NEXT_PUBLIC_FORM_SLUG || "cardboard-bale-recycling-contact";
+const FORM_FIELDS: (keyof ContactFormData)[] = [
+  "firstName",
+  "lastName",
+  "email",
+  "phone",
+  "company",
+  "address",
+  "zipCode",
+  "service",
+  "monthlyVolume",
+  "timeframe",
+  "message",
+  "smsConsent",
+];
+
+const ERROR_MESSAGE =
+  "There was an error submitting your form. Please try again or call us directly.";
+
+const inputClass = (hasError?: boolean) =>
+  cn(
+    "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
+    hasError ? "border-red-300" : "border-gray-300"
+  );
 
 export function ContactForm({
   title = "Get In Touch",
@@ -34,6 +57,7 @@ export function ContactForm({
     register,
     handleSubmit,
     reset,
+    setError,
     formState: { errors, isSubmitSuccessful, isSubmitting },
   } = useForm<FormData>({
     mode: "onTouched",
@@ -42,50 +66,47 @@ export function ContactForm({
   const [isSuccess, setIsSuccess] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  // Made on load, kept across failed tries, renewed after a success.
+  const submissionId = useRef("");
+  const attribution = useRef<Record<string, string>>({});
+
+  useEffect(() => {
+    submissionId.current = newSubmissionId();
+    attribution.current = readAttribution();
+  }, []);
 
   const onSubmit = async (data: FormData) => {
-    // Check honeypot
-    if (data.botcheck) {
-      return;
-    }
-
     setLoading(true);
     setMessage("");
+    if (!submissionId.current) submissionId.current = newSubmissionId();
 
-    try {
-      const response = await fetch(API_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-API-Key": API_KEY,
-        },
-        body: JSON.stringify({
-          formSlug: FORM_SLUG,
-          name: data.name,
-          email: data.email,
-          company: data.company || "",
-          message: data.message,
-        }),
-      });
+    // A filled honeypot goes to the server too, which answers as for a success.
+    const result = await sendLead(data, submissionId.current, attribution.current);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Submission failed");
-      }
-
+    if (result.kind === "ok") {
       setIsSuccess(true);
       setMessage("Thank you! We'll contact you within 24 hours to discuss your recycling needs.");
+      submissionId.current = newSubmissionId();
       reset();
-    } catch (err) {
+    } else {
       setIsSuccess(false);
-      setMessage(
-        err instanceof Error
-          ? err.message
-          : "There was an error submitting your form. Please try again or call us directly."
-      );
-    } finally {
-      setLoading(false);
+      if (result.kind === "fields") {
+        let shown = false;
+        for (const name of FORM_FIELDS) {
+          const fieldMessage = result.fields[name];
+          if (fieldMessage) {
+            setError(name, { type: "server", message: fieldMessage });
+            shown = true;
+          }
+        }
+        setMessage(shown ? "Please check the highlighted fields." : ERROR_MESSAGE);
+      } else if (result.kind === "too-many") {
+        setMessage("Too many requests. Please wait a moment and try again.");
+      } else {
+        setMessage(ERROR_MESSAGE);
+      }
     }
+    setLoading(false);
   };
 
   // Reset success message after 5 seconds
@@ -127,38 +148,66 @@ export function ContactForm({
           type="checkbox"
           className="hidden"
           style={{ display: "none" }}
+          tabIndex={-1}
+          autoComplete="off"
           {...register("botcheck")}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label
-              htmlFor="name"
+              htmlFor="firstName"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
-              Full Name *
+              First Name *
             </label>
             <input
               type="text"
-              id="name"
-              {...register("name", {
-                required: "Name is required",
+              id="firstName"
+              autoComplete="given-name"
+              {...register("firstName", {
+                required: "First name is required",
                 maxLength: {
                   value: 80,
-                  message: "Name cannot exceed 80 characters",
+                  message: "First name cannot exceed 80 characters",
                 },
               })}
-              className={cn(
-                "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
-                errors.name ? "border-red-300" : "border-gray-300"
-              )}
-              placeholder="Your full name"
+              className={inputClass(!!errors.firstName)}
+              placeholder="First name"
             />
-            {errors.name && (
-              <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+            {errors.firstName && (
+              <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
             )}
           </div>
 
+          <div>
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Last Name *
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              autoComplete="family-name"
+              {...register("lastName", {
+                required: "Last name is required",
+                maxLength: {
+                  value: 80,
+                  message: "Last name cannot exceed 80 characters",
+                },
+              })}
+              className={inputClass(!!errors.lastName)}
+              placeholder="Last name"
+            />
+            {errors.lastName && (
+              <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label
               htmlFor="email"
@@ -169,6 +218,7 @@ export function ContactForm({
             <input
               type="email"
               id="email"
+              autoComplete="email"
               {...register("email", {
                 required: "Email is required",
                 pattern: {
@@ -176,10 +226,7 @@ export function ContactForm({
                   message: "Please enter a valid email address",
                 },
               })}
-              className={cn(
-                "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
-                errors.email ? "border-red-300" : "border-gray-300"
-              )}
+              className={inputClass(!!errors.email)}
               placeholder="your@company.com"
             />
             {errors.email && (
@@ -188,22 +235,188 @@ export function ContactForm({
               </p>
             )}
           </div>
+
+          <div>
+            <label
+              htmlFor="phone"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Phone Number *
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              autoComplete="tel"
+              {...register("phone", {
+                required: "Phone number is required",
+                validate: (value) =>
+                  isValidPhone(value) || "Please enter a valid phone number",
+              })}
+              className={inputClass(!!errors.phone)}
+              placeholder="(555) 123-4567"
+            />
+            {errors.phone && (
+              <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label
+              htmlFor="company"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Company Name
+            </label>
+            <input
+              type="text"
+              id="company"
+              autoComplete="organization"
+              {...register("company", {
+                maxLength: {
+                  value: 120,
+                  message: "Company name cannot exceed 120 characters",
+                },
+              })}
+              className={inputClass(!!errors.company)}
+              placeholder="Your company"
+            />
+            {errors.company && (
+              <p className="mt-1 text-sm text-red-600">{errors.company.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="zipCode"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              ZIP Code *
+            </label>
+            <input
+              type="text"
+              id="zipCode"
+              autoComplete="postal-code"
+              {...register("zipCode", {
+                required: "ZIP code is required",
+                pattern: {
+                  value: /^\d{5}(-\d{4})?$/,
+                  message: "Please enter a valid ZIP code",
+                },
+              })}
+              className={inputClass(!!errors.zipCode)}
+              placeholder="12345"
+            />
+            {errors.zipCode && (
+              <p className="mt-1 text-sm text-red-600">{errors.zipCode.message}</p>
+            )}
+          </div>
         </div>
 
         <div>
           <label
-            htmlFor="company"
+            htmlFor="address"
             className="block text-sm font-medium text-gray-700 mb-1"
           >
-            Company Name
+            Street Address
           </label>
           <input
             type="text"
-            id="company"
-            {...register("company")}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-            placeholder="Your company"
+            id="address"
+            autoComplete="street-address"
+            {...register("address", {
+              maxLength: {
+                value: 200,
+                message: "Address cannot exceed 200 characters",
+              },
+            })}
+            className={inputClass(!!errors.address)}
+            placeholder="Street address"
           />
+          {errors.address && (
+            <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label
+              htmlFor="service"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              How Can We Help? *
+            </label>
+            <select
+              id="service"
+              {...register("service", {
+                required: "Please choose how we can help",
+              })}
+              className={inputClass(!!errors.service)}
+            >
+              <option value="">Select an option</option>
+              {serviceOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {errors.service && (
+              <p className="mt-1 text-sm text-red-600">{errors.service.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="monthlyVolume"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Monthly Volume (tons) *
+            </label>
+            <select
+              id="monthlyVolume"
+              {...register("monthlyVolume", {
+                required: "Monthly volume is required",
+              })}
+              className={inputClass(!!errors.monthlyVolume)}
+            >
+              <option value="">Select volume range</option>
+              {monthlyVolumeOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            {errors.monthlyVolume && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.monthlyVolume.message}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="timeframe"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            When do you need this?
+          </label>
+          <select
+            id="timeframe"
+            {...register("timeframe")}
+            className={inputClass(!!errors.timeframe)}
+          >
+            <option value="">Select a timeframe</option>
+            {timeframeOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          {errors.timeframe && (
+            <p className="mt-1 text-sm text-red-600">{errors.timeframe.message}</p>
+          )}
         </div>
 
         <div>
@@ -227,16 +440,27 @@ export function ContactForm({
                 message: "Message cannot exceed 1000 characters",
               },
             })}
-            className={cn(
-              "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
-              errors.message ? "border-red-300" : "border-gray-300"
-            )}
+            className={inputClass(!!errors.message)}
             placeholder="Tell us about your cardboard recycling needs..."
           />
           {errors.message && (
             <p className="mt-1 text-sm text-red-600">
               {errors.message.message}
             </p>
+          )}
+        </div>
+
+        <div>
+          <label className="flex items-start gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              {...register("smsConsent")}
+              className="mt-1"
+            />
+            {SMS_CONSENT_TEXT}
+          </label>
+          {errors.smsConsent && (
+            <p className="mt-1 text-sm text-red-600">{errors.smsConsent.message}</p>
           )}
         </div>
 
