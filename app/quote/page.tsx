@@ -173,6 +173,7 @@ export default function QuotePage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Quote Form */}
               <div className="lg:col-span-2">
+                {/* eslint-disable-next-line react-hooks/refs -- react-hook-form's handleSubmit reads the refs only when the form is submitted */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                   {/* Hidden honeypot field for spam prevention */}
                   <input

@@ -142,6 +142,7 @@ export function ContactForm({
         </div>
       )}
 
+      {/* eslint-disable-next-line react-hooks/refs -- react-hook-form's handleSubmit reads the refs only when the form is submitted */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Hidden honeypot field for spam prevention */}
         <input
