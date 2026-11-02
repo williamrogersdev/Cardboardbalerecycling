@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Send, CheckCircle, AlertCircle, Calculator } from "lucide-react";
+import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { QuoteFormData } from "@/types";
 import { HeroSection } from "@/components/ui/hero-section";
 import { cn } from "@/lib/utils";
@@ -36,7 +36,7 @@ const FORM_FIELDS: (keyof QuoteFormData)[] = [
 ];
 
 const ERROR_MESSAGE =
-  "There was an error submitting your quote request. Please try again or call us directly.";
+  "There was an error submitting your quote request. Please try again.";
 
 // Define form data type with botcheck
 type FormData = QuoteFormData & {
@@ -47,7 +47,6 @@ export default function QuotePage() {
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     setError,
     formState: { errors, isSubmitSuccessful, isSubmitting },
@@ -58,9 +57,6 @@ export default function QuotePage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const monthlyVolume = watch("monthlyVolume");
-  const equipmentNeeds = watch("equipmentNeeds");
 
   // Made on load, kept across failed tries, renewed after a success.
   const submissionId = useRef("");
@@ -81,7 +77,7 @@ export default function QuotePage() {
 
     if (result.kind === "ok") {
       setIsSuccess(true);
-      setMessage("Thank you for your quote request. Our team will review your information and contact you within 24 hours with a detailed proposal.");
+      setMessage("Thank you for your request. We will pass it to partner suppliers in our network, and a partner will follow up with you.");
       submissionId.current = newSubmissionId();
       reset();
     } else {
@@ -117,34 +113,13 @@ export default function QuotePage() {
     }
   }, [isSubmitSuccessful, isSuccess]);
 
-  const estimateRevenue = (): string => {
-    if (!monthlyVolume) return "$0 - $0";
-
-    const volume = parseInt(monthlyVolume.split("-")[0]);
-    let minRate = 80;
-    let maxRate = 100;
-
-    if (volume >= 50) {
-      minRate = 100;
-      maxRate = 120;
-    } else if (volume >= 10) {
-      minRate = 90;
-      maxRate = 110;
-    }
-
-    const minRevenue = volume * minRate;
-    const maxRevenue = volume * maxRate;
-
-    return `$${minRevenue.toLocaleString()} - $${maxRevenue.toLocaleString()}`;
-  };
-
   return (
     <>
       {/* Hero Section */}
       <HeroSection
-        subtitle="📊 Free Assessment"
+        subtitle="📋 Free Quote Request"
         title="Get Your Custom Quote"
-        description="Discover how much revenue you can generate from your cardboard waste. Fill out our comprehensive form for a detailed assessment and pricing proposal."
+        description="Tell us about your cardboard, your volume and where you are. We pass your request to partner suppliers in our network, and a partner follows up with a quote."
         primaryCta={{
           text: "Start Quote Form",
           href: "#quote-form",
@@ -160,8 +135,8 @@ export default function QuotePage() {
                 Request Your Free Quote
               </h2>
               <p className="text-xl text-gray-600">
-                Provide details about your business and cardboard waste to
-                receive an accurate assessment.
+                Free and no obligation. Partner suppliers in our network
+                prepare the quotes.
               </p>
             </div>
 
@@ -174,7 +149,7 @@ export default function QuotePage() {
                   </h3>
                   <p className="text-green-700">
                     {message ||
-                      "Thank you for your quote request. Our team will review your information and contact you within 24 hours with a detailed proposal."}
+                      "Thank you for your request. We will pass it to partner suppliers in our network, and a partner will follow up with you."}
                   </p>
                 </div>
               </div>
@@ -189,7 +164,7 @@ export default function QuotePage() {
                   </h3>
                   <p className="text-red-700">
                     {message ||
-                      "There was an error submitting your quote request. Please try again or call us directly at (800) CARDBOARD."}
+                      "There was an error submitting your quote request. Please try again."}
                   </p>
                 </div>
               </div>
@@ -302,7 +277,7 @@ export default function QuotePage() {
                             "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
                             errors.email ? "border-red-300" : "border-gray-300"
                           )}
-                          placeholder="your@company.com"
+                          placeholder="Email address"
                         />
                         {errors.email && (
                           <p className="mt-1 text-sm text-red-600">
@@ -331,7 +306,7 @@ export default function QuotePage() {
                             "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
                             errors.phone ? "border-red-300" : "border-gray-300"
                           )}
-                          placeholder="(555) 123-4567"
+                          placeholder="Phone number"
                         />
                         {errors.phone && (
                           <p className="mt-1 text-sm text-red-600">
@@ -362,7 +337,7 @@ export default function QuotePage() {
                           "w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500",
                           errors.company ? "border-red-300" : "border-gray-300"
                         )}
-                        placeholder="Your company"
+                        placeholder="Company name"
                       />
                       {errors.company && (
                         <p className="mt-1 text-sm text-red-600">
@@ -496,7 +471,7 @@ export default function QuotePage() {
                               ? "border-red-300"
                               : "border-gray-300"
                           )}
-                          placeholder="12345"
+                          placeholder="ZIP or postal code"
                         />
                         {errors.zipCode && (
                           <p className="mt-1 text-sm text-red-600">
@@ -623,7 +598,7 @@ export default function QuotePage() {
                             valueAsNumber: true,
                           })}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                          placeholder="$500"
+                          placeholder="Amount in USD"
                         />
                         {errors.currentDisposalCost && (
                           <p className="mt-1 text-sm text-red-600">
@@ -786,58 +761,6 @@ export default function QuotePage() {
 
               {/* Quote Summary */}
               <div className="space-y-6">
-                <div className="bg-primary-50 rounded-lg p-6 sticky top-8">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Calculator className="w-5 h-5 text-primary-600" />
-                    <h3 className="text-lg font-bold text-gray-900">
-                      Estimated Revenue
-                    </h3>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div>
-                      <div className="text-sm text-gray-600 mb-1">
-                        Monthly Volume
-                      </div>
-                      <div className="font-semibold text-gray-900">
-                        {monthlyVolume || "Not selected"}
-                      </div>
-                    </div>
-
-                    <div>
-                      <div className="text-sm text-gray-600 mb-1">
-                        Estimated Revenue Range
-                      </div>
-                      <div className="text-2xl font-bold text-primary-600">
-                        {estimateRevenue()}
-                      </div>
-                      <div className="text-xs text-gray-500">per month</div>
-                    </div>
-
-                    {equipmentNeeds === "true" && (
-                      <div className="bg-white rounded-lg p-4">
-                        <div className="text-sm font-medium text-gray-900 mb-1">
-                          Equipment Rental
-                        </div>
-                        <div className="text-sm text-gray-600">
-                          Baler rental available
-                        </div>
-                        <div className="text-sm text-gray-600">
-                          Typically $200-500/month
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-primary-200">
-                    <p className="text-xs text-gray-600">
-                      * Estimates based on current market rates and typical
-                      material quality. Actual pricing may vary based on
-                      specific conditions.
-                    </p>
-                  </div>
-                </div>
-
                 <div className="bg-gray-50 rounded-lg p-6">
                   <h3 className="text-lg font-bold text-gray-900 mb-4">
                     What Happens Next?
@@ -848,9 +771,9 @@ export default function QuotePage() {
                         1
                       </div>
                       <div>
-                        <div className="font-medium">Quote Review</div>
+                        <div className="font-medium">Request Sent</div>
                         <div className="text-gray-600">
-                          We review your information within 4 hours
+                          Your request goes to partner suppliers in our network
                         </div>
                       </div>
                     </li>
@@ -859,9 +782,9 @@ export default function QuotePage() {
                         2
                       </div>
                       <div>
-                        <div className="font-medium">Initial Contact</div>
+                        <div className="font-medium">Partner Follow-Up</div>
                         <div className="text-gray-600">
-                          Our team contacts you within 24 hours
+                          A partner supplier contacts you to confirm details
                         </div>
                       </div>
                     </li>
@@ -872,7 +795,7 @@ export default function QuotePage() {
                       <div>
                         <div className="font-medium">Site Assessment</div>
                         <div className="text-gray-600">
-                          Optional on-site evaluation if needed
+                          Some partners visit the site if needed
                         </div>
                       </div>
                     </li>
@@ -881,9 +804,9 @@ export default function QuotePage() {
                         4
                       </div>
                       <div>
-                        <div className="font-medium">Proposal</div>
+                        <div className="font-medium">Quote</div>
                         <div className="text-gray-600">
-                          Detailed pricing and service proposal
+                          The partner sets the price, schedule and terms
                         </div>
                       </div>
                     </li>

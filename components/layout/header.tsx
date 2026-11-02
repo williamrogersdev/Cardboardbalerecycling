@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, Recycle, Mail, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Menu, X, Recycle } from "lucide-react";
 
 const navigation = [
   { name: "Services", href: "/services" },
@@ -18,27 +17,6 @@ export function Header() {
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      {/* Top Contact Bar */}
-      <div className="bg-gray-50 border-b border-gray-200">
-        <div className="container-max">
-          <div className="flex items-center justify-between py-2">
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Clock className="w-4 h-4" />
-              <span>Mon-Fri: 8AM-6PM EST</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Mail className="w-4 h-4" />
-              <a
-                href="mailto:support@cardboardbalerecycling.com"
-                className="hover:text-primary-600 transition-colors"
-              >
-                support@cardboardbalerecycling.com
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Header */}
       <div className="container-max">
         <div className="flex items-center justify-between py-4">
@@ -52,7 +30,7 @@ export function Header() {
                 Cardboard Bale Recycling
               </div>
               <div className="text-xs text-gray-500 hidden sm:block">
-                Turn Your Waste Into Revenue
+                Cardboard recycling requests
               </div>
             </div>
           </Link>
@@ -80,6 +58,7 @@ export function Header() {
           {/* Mobile menu button */}
           <button
             type="button"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             className="lg:hidden p-2 rounded-md text-gray-700 hover:text-primary-600 hover:bg-gray-100"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >

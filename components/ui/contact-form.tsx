@@ -40,7 +40,7 @@ const FORM_FIELDS: (keyof ContactFormData)[] = [
 ];
 
 const ERROR_MESSAGE =
-  "There was an error submitting your form. Please try again or call us directly.";
+  "There was an error submitting your form. Please try again.";
 
 const inputClass = (hasError?: boolean) =>
   cn(
@@ -50,7 +50,7 @@ const inputClass = (hasError?: boolean) =>
 
 export function ContactForm({
   title = "Get In Touch",
-  description = "Ready to start recycling? Contact us for a free consultation.",
+  description = "Ready to start recycling? Send a free, no-obligation request.",
   className,
 }: ContactFormProps) {
   const {
@@ -85,7 +85,7 @@ export function ContactForm({
 
     if (result.kind === "ok") {
       setIsSuccess(true);
-      setMessage("Thank you! We'll contact you within 24 hours to discuss your recycling needs.");
+      setMessage("Thank you for your request. We will pass it to partner suppliers in our network, and a partner will follow up with you.");
       submissionId.current = newSubmissionId();
       reset();
     } else {
@@ -227,7 +227,7 @@ export function ContactForm({
                 },
               })}
               className={inputClass(!!errors.email)}
-              placeholder="your@company.com"
+              placeholder="Email address"
             />
             {errors.email && (
               <p className="mt-1 text-sm text-red-600">
@@ -253,7 +253,7 @@ export function ContactForm({
                   isValidPhone(value) || "Please enter a valid phone number",
               })}
               className={inputClass(!!errors.phone)}
-              placeholder="(555) 123-4567"
+              placeholder="Phone number"
             />
             {errors.phone && (
               <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
@@ -280,7 +280,7 @@ export function ContactForm({
                 },
               })}
               className={inputClass(!!errors.company)}
-              placeholder="Your company"
+              placeholder="Company name"
             />
             {errors.company && (
               <p className="mt-1 text-sm text-red-600">{errors.company.message}</p>
@@ -306,7 +306,7 @@ export function ContactForm({
                 },
               })}
               className={inputClass(!!errors.zipCode)}
-              placeholder="12345"
+              placeholder="ZIP or postal code"
             />
             {errors.zipCode && (
               <p className="mt-1 text-sm text-red-600">{errors.zipCode.message}</p>

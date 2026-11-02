@@ -13,7 +13,7 @@ const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const US_ZIP = /^\d{5}(-\d{4})?$/;
 const CA_POSTAL = /^[A-Za-z]\d[A-Za-z][\s-]?\d[A-Za-z]\d$/;
 const SUBMISSION_ID = /^[A-Za-z0-9._:-]{8,128}$/;
-const TRY_AGAIN = "We could not send your request. Please try again or call us directly.";
+const TRY_AGAIN = "We could not send your request. Please try again.";
 const TOO_MANY = "Too many requests. Please wait a moment and try again.";
 const CHECK_FIELDS = "Check the highlighted fields";
 

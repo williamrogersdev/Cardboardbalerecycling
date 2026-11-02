@@ -3,19 +3,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   MapPin,
-  Building,
   DollarSign,
-  Phone,
   Calculator,
   CheckCircle,
-  Users,
-  Clock,
   Truck,
-  Star,
-  TrendingUp,
+  Wrench,
+  Handshake,
 } from "lucide-react";
-import { serviceAreas, stateCardboardPricing } from "@/lib/data";
-import { LocalBusinessJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld";
+import { serviceAreas } from "@/lib/data";
+import { OrganizationJsonLd, BreadcrumbJsonLd } from "@/components/seo/json-ld";
 
 interface CityPageProps {
   params: Promise<{
@@ -24,135 +20,96 @@ interface CityPageProps {
   }>;
 }
 
-function formatStateName(stateSlug: string): string {
-  return stateSlug
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+function slugOf(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, "-");
 }
 
-function formatCityName(citySlug: string): string {
-  return citySlug
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+function findPlace(stateSlug: string, citySlug: string) {
+  const area = serviceAreas.find((a) => slugOf(a.state) === stateSlug);
+  const city = area?.cities.find((c) => slugOf(c) === citySlug);
+  return area && city ? { stateName: area.state, cityName: city } : null;
 }
 
-function formatCurrency(amount: number): string {
-  return `$${amount}`;
-}
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const params: { state: string; city: string }[] = [];
-
-  serviceAreas.forEach((area) => {
-    const stateSlug = area.state.toLowerCase().replace(/\s+/g, "-");
-    area.cities.forEach((city) => {
-      const citySlug = city.toLowerCase().replace(/\s+/g, "-");
-      params.push({
-        state: stateSlug,
-        city: citySlug,
-      });
-    });
-  });
-
-  return params;
+  return serviceAreas.flatMap((area) =>
+    area.cities.map((city) => ({
+      state: slugOf(area.state),
+      city: slugOf(city),
+    }))
+  );
 }
 
 export async function generateMetadata({
   params,
 }: CityPageProps): Promise<Metadata> {
   const { state, city } = await params;
-  const stateName = formatStateName(state);
-  const cityName = formatCityName(city);
+  const place = findPlace(state, city);
+  if (!place) return {};
+  const { stateName, cityName } = place;
 
   return {
-    title: `${cityName}, ${stateName} Cardboard Bale Recycling - Local Pickup Services`,
-    description: `Professional cardboard bale recycling in ${cityName}, ${stateName}. Local pickup, competitive rates, and reliable service for your business.`,
+    title: `${cityName}, ${stateName} Cardboard Bale Recycling - Pickup Quotes`,
+    description: `Request cardboard bale pickup, bale sales or baler rental in ${cityName}, ${stateName}. Requests go to partner suppliers in our network; availability depends on partners near you.`,
     keywords: [
       `${cityName} cardboard recycling`,
       `cardboard bale pickup ${cityName}`,
-      `${cityName} ${stateName} cardboard waste`,
       `sell cardboard bales ${cityName}`,
       `cardboard recycling ${cityName} ${stateName}`,
     ],
+    alternates: { canonical: `/${state}/${city}` },
   };
 }
 
 export default async function CityPage({ params }: CityPageProps) {
   const { state, city } = await params;
-  const stateName = formatStateName(state);
-  const cityName = formatCityName(city);
+  const place = findPlace(state, city);
 
-  // Find state and city data
-  const stateService = serviceAreas.find(
-    (area) => area.state.toLowerCase().replace(/\s+/g, "-") === state
-  );
-
-  if (!stateService) {
+  if (!place) {
     notFound();
   }
 
-  const cityExists = stateService.cities.some(
-    (c) => c.toLowerCase().replace(/\s+/g, "-") === city
-  );
-
-  if (!cityExists) {
-    notFound();
-  }
-
-  const statePricing = stateCardboardPricing.find(
-    (pricing) =>
-      pricing.state.toLowerCase().replace(/\s+/g, "-") === state
-  );
+  const { stateName, cityName } = place;
 
   const serviceFeatures = [
     {
-      title: "Local Pickup Routes",
-      description: `Regular scheduled pickups throughout ${cityName}`,
+      title: "Pickup Requests",
+      description: `Request pickup of baled or loose cardboard in ${cityName}`,
       icon: Truck,
       color: "bg-blue-100 text-blue-600",
     },
     {
-      title: "Competitive Pricing",
-      description: `Best rates in the ${cityName} market`,
+      title: "Pricing by Quote",
+      description: "Partner buyers quote based on grade, volume and market",
       icon: DollarSign,
       color: "bg-green-100 text-green-600",
     },
     {
-      title: "Expert Team",
-      description: `${cityName}-based specialists who know your area`,
-      icon: Users,
+      title: "Partner Network",
+      description: `Requests go to partner suppliers that serve ${cityName}`,
+      icon: Handshake,
       color: "bg-purple-100 text-purple-600",
     },
     {
-      title: "Fast Response",
-      description: `Quick quotes and scheduling for ${cityName} businesses`,
-      icon: Clock,
+      title: "Baler Rental",
+      description: "Ask about renting or leasing a baler through a partner",
+      icon: Wrench,
       color: "bg-orange-100 text-orange-600",
     },
   ];
 
-  const whyChooseUs = [
-    "Established local presence in " + cityName,
-    "Understanding of " + cityName + " business needs",
-    "Optimized routes for " + cityName + " efficiency",
-    "Local support team available",
-    "Flexible scheduling options",
-    "Environmental compliance assurance",
+  const checklist = [
+    `Requests from businesses in ${cityName} and nearby`,
+    "Free, no-obligation quote request",
+    "Baled or loose cardboard",
+    "Pickup schedule set with the partner supplier",
+    "Availability depends on partner suppliers near you",
   ];
-
-  const priceRange = statePricing
-    ? `$${statePricing.priceRange.min}-$${statePricing.priceRange.max}/ton`
-    : "$70-$120/ton";
 
   return (
     <>
-      <LocalBusinessJsonLd
-        city={cityName}
-        state={stateName}
-        priceRange={priceRange}
-      />
+      <OrganizationJsonLd city={cityName} state={stateName} />
       <BreadcrumbJsonLd
         items={[
           { name: "Home", url: "https://cardboardbalerecycling.com" },
@@ -172,257 +129,181 @@ export default async function CityPage({ params }: CityPageProps) {
                   {cityName}, {stateName}
                 </span>
               </div>
-            <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-              Cardboard Recycling in {cityName}
-            </h1>
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Professional cardboard bale recycling services in {cityName},{" "}
-              {stateName}. Local pickup, competitive rates, and reliable service
-              for your business.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <div className="text-center">
+              <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
+                Cardboard Recycling in {cityName}
+              </h1>
+              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+                Request cardboard bale pickup, sell your bales or ask about
+                baler rental in {cityName}, {stateName}. We pass your request
+                to partner suppliers in our network.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/quote" className="btn-primary text-lg py-4 px-8">
                   Get {cityName} Quote
                 </Link>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Service Overview */}
-      <section className="py-16 lg:py-24">
-        <div className="container-max">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* City Info */}
-              <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                  Serving {cityName} Businesses
-                </h2>
-                <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                  We provide comprehensive cardboard bale recycling services
-                  throughout {cityName}, helping local businesses turn their
-                  cardboard waste into a profitable revenue stream.
-                </p>
+        {/* Service Overview */}
+        <section className="py-16 lg:py-24">
+          <div className="container-max">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                    Requests From {cityName} Businesses
+                  </h2>
+                  <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                    Stores, warehouses, plants and distribution centers in{" "}
+                    {cityName} can send one free request for cardboard bale
+                    pickup or a bale purchase quote.
+                  </p>
 
-                <div className="space-y-4">
-                  {whyChooseUs.map((reason, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <span className="text-gray-700">{reason}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Stats Card */}
-              <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                  {cityName} Service Highlights
-                </h3>
-
-                <div className="grid grid-cols-2 gap-6 mb-6">
-                  <div className="text-center p-4 bg-primary-50 rounded-lg">
-                    <div className="text-2xl font-bold text-primary-600 mb-1">
-                      <Clock className="w-6 h-6 mx-auto mb-2" />
-                      24hrs
-                    </div>
-                    <div className="text-sm text-gray-600">Response Time</div>
-                  </div>
-                  <div className="text-center p-4 bg-green-50 rounded-lg">
-                    <div className="text-2xl font-bold text-green-600 mb-1">
-                      <Star className="w-6 h-6 mx-auto mb-2" />
-                      5.0
-                    </div>
-                    <div className="text-sm text-gray-600">Customer Rating</div>
+                  <div className="space-y-4">
+                    {checklist.map((reason) => (
+                      <div key={reason} className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                        <span className="text-gray-700">{reason}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                {statePricing && (
-                  <div className="text-center p-4 bg-gray-50 rounded-lg">
-                    <div className="text-sm text-gray-600 mb-1">
-                      Current {stateName} Rates
-                    </div>
-                    <div className="text-xl font-bold text-gray-900">
-                      {formatCurrency(statePricing.priceRange.min)} -{" "}
-                      {formatCurrency(statePricing.priceRange.max)}
-                    </div>
-                    <div className="text-sm text-gray-600">per ton</div>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Service Features */}
-      <section className="py-16 lg:py-24 bg-gray-50">
-        <div className="container-max">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Why Businesses in {cityName} Choose Us
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Local expertise, professional service, and competitive rates for{" "}
-                {cityName} businesses
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {serviceFeatures.map((feature, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300"
-                >
-                  <div
-                    className={`flex items-center justify-center w-12 h-12 ${feature.color} rounded-lg mb-4`}
-                  >
-                    <feature.icon className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">
-                    {feature.title}
+                <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    Pricing in {cityName}
                   </h3>
-                  <p className="text-gray-600 text-sm">{feature.description}</p>
+                  <p className="text-gray-600 mb-6">
+                    What a partner offers depends on your cardboard&apos;s
+                    grade and condition, your volume, distance to the nearest
+                    mill or processor and the current market. Pricing is by
+                    quote.
+                  </p>
+                  <Link href="/pricing" className="btn-outline">
+                    How Pricing Works
+                  </Link>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-16 lg:py-24">
-        <div className="container-max">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                How It Works in {cityName}
-              </h2>
-              <p className="text-lg text-gray-600">
-                Simple, straightforward process for {cityName} businesses
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="flex items-center justify-center w-16 h-16 bg-primary-500 text-white rounded-full mx-auto mb-4 text-xl font-bold">
-                  1
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  Contact Us
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Call or get a quote online for {cityName} service
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="flex items-center justify-center w-16 h-16 bg-primary-500 text-white rounded-full mx-auto mb-4 text-xl font-bold">
-                  2
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  Schedule Pickup
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  We'll arrange convenient pickup times for your {cityName}{" "}
-                  location
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="flex items-center justify-center w-16 h-16 bg-primary-500 text-white rounded-full mx-auto mb-4 text-xl font-bold">
-                  3
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  We Collect
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Professional pickup and weighing at your {cityName} facility
-                </p>
-              </div>
-
-              <div className="text-center">
-                <div className="flex items-center justify-center w-16 h-16 bg-primary-500 text-white rounded-full mx-auto mb-4 text-xl font-bold">
-                  4
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  Get Paid
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  Receive payment within 7 days of pickup
-                </p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Local Testimonial */}
-      <section className="py-16 lg:py-24 bg-gray-50">
-        <div className="container-max">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl p-8 lg:p-12 shadow-xl">
-              <div className="text-center mb-8">
-                <div className="flex items-center justify-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-5 h-5 text-yellow-400 fill-current"
-                    />
-                  ))}
-                </div>
-                <blockquote className="text-xl italic text-gray-700 mb-6">
-                  "The team has been fantastic to work with. They understand our{" "}
-                  {cityName} operations and always show up when scheduled. We've
-                  turned our cardboard waste from a cost center into a revenue
-                  stream."
-                </blockquote>
-                <div className="text-gray-600">
-                  <div className="font-semibold">Sarah Johnson</div>
-                  <div className="text-sm">
-                    Operations Manager, {cityName} Distribution Center
+        {/* Service Features */}
+        <section className="py-16 lg:py-24 bg-gray-50">
+          <div className="container-max">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  What You Can Request in {cityName}
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  All services are provided by partner suppliers in our
+                  network.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {serviceFeatures.map((feature) => (
+                  <div
+                    key={feature.title}
+                    className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300"
+                  >
+                    <div
+                      className={`flex items-center justify-center w-12 h-12 ${feature.color} rounded-lg mb-4`}
+                    >
+                      <feature.icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {feature.description}
+                    </p>
                   </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Section */}
-      <section className="py-16 lg:py-24 bg-primary-500">
-        <div className="container-max">
-          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-              Ready to Start in {cityName}?
-            </h2>
-            <p className="text-xl text-primary-100 mb-8 leading-relaxed">
-              Join other {cityName} businesses turning their cardboard waste
-              into revenue.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/quote"
-                className="bg-white hover:bg-gray-50 text-primary-600 font-semibold py-3 px-8 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
-              >
-                <Calculator className="w-5 h-5 inline mr-2" />
-                Get Free {cityName} Quote
-              </Link>
-              <Link
-                href={`/${state}`}
-                className="border border-primary-300 hover:border-white text-white hover:bg-white hover:text-primary-600 font-semibold py-3 px-8 rounded-lg transition-all duration-200"
-              >
-                View {stateName} Services
-              </Link>
+        {/* How It Works */}
+        <section className="py-16 lg:py-24">
+          <div className="container-max">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                  How It Works in {cityName}
+                </h2>
+                <p className="text-lg text-gray-600">
+                  From your request to a partner&apos;s quote
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[
+                  {
+                    title: "Request",
+                    text: `Send the free quote request for your ${cityName} site`,
+                  },
+                  {
+                    title: "Match",
+                    text: "We pass it to partner suppliers that serve your area",
+                  },
+                  {
+                    title: "Follow-Up",
+                    text: "A partner supplier contacts you to confirm details",
+                  },
+                  {
+                    title: "Quote",
+                    text: "You review the partner's price, schedule and terms",
+                  },
+                ].map((step, index) => (
+                  <div key={step.title} className="text-center">
+                    <div className="flex items-center justify-center w-16 h-16 bg-primary-500 text-white rounded-full mx-auto mb-4 text-xl font-bold">
+                      {index + 1}
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm">{step.text}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-16 lg:py-24 bg-primary-500">
+          <div className="container-max">
+            <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
+                Ready to Start in {cityName}?
+              </h2>
+              <p className="text-xl text-primary-100 mb-8 leading-relaxed">
+                Send a free request and a partner supplier will follow up.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  href="/quote"
+                  className="bg-white hover:bg-gray-50 text-primary-600 font-semibold py-3 px-8 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+                >
+                  <Calculator className="w-5 h-5 inline mr-2" />
+                  Get Free {cityName} Quote
+                </Link>
+                <Link
+                  href={`/${state}`}
+                  className="border border-primary-300 hover:border-white text-white hover:bg-white hover:text-primary-600 font-semibold py-3 px-8 rounded-lg transition-all duration-200"
+                >
+                  View {stateName} Page
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </>
   );
 }

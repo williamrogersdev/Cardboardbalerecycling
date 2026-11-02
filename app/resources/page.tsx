@@ -2,260 +2,86 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   BookOpen,
-  Calculator,
-  FileText,
-  Download,
-  TrendingUp,
-  Recycle,
-  Lightbulb,
-  AlertCircle,
+  Layers,
+  Wrench,
   CheckCircle,
-  ExternalLink,
-  Users,
-  BarChart3,
-  Leaf,
-  DollarSign,
+  AlertCircle,
+  HelpCircle,
+  Calculator,
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Resources - Cardboard Recycling Guides, Tools & Information",
+  title: "Resources - Cardboard Bale Recycling Guide",
   description:
-    "Access comprehensive cardboard recycling resources including guides, calculators, market trends, and educational materials to maximize your recycling program.",
+    "A practical guide to cardboard bale recycling: common cardboard grades, how to make a clean bale, vertical and horizontal balers, and questions to ask a recycler.",
   keywords: [
-    "cardboard recycling guides",
-    "recycling calculator",
-    "cardboard market trends",
-    "recycling resources",
-    "sustainability guides",
-    "waste management tools",
+    "cardboard recycling guide",
+    "OCC grade",
+    "how to bale cardboard",
+    "vertical baler vs horizontal baler",
+    "cardboard bale preparation",
   ],
+  alternates: { canonical: "/resources" },
 };
 
-const resourceCategories = [
+const grades = [
   {
-    title: "Getting Started Guides",
+    name: "Old Corrugated Containers (OCC)",
     description:
-      "Essential information for businesses new to cardboard recycling",
-    icon: BookOpen,
-    color: "bg-blue-500",
-    resources: [
-      {
-        title: "Cardboard Recycling 101",
-        description:
-          "Complete beginner's guide to cardboard recycling for businesses",
-        type: "Guide",
-        downloadUrl: "#",
-        readTime: "5 min read",
-      },
-      {
-        title: "Setting Up Your Program",
-        description:
-          "Step-by-step instructions for implementing a recycling program",
-        type: "Checklist",
-        downloadUrl: "#",
-        readTime: "3 min read",
-      },
-      {
-        title: "Quality Standards Guide",
-        description: "Learn what makes cardboard suitable for recycling",
-        type: "Guide",
-        downloadUrl: "#",
-        readTime: "4 min read",
-      },
-    ],
+      "Used corrugated boxes and sheets, the most common grade from stores, warehouses and plants.",
   },
   {
-    title: "Financial Tools",
-    description: "Calculators and tools to estimate your recycling revenue",
-    icon: Calculator,
-    color: "bg-green-500",
-    resources: [
-      {
-        title: "Revenue Calculator",
-        description:
-          "Calculate potential monthly revenue from your cardboard waste",
-        type: "Calculator",
-        downloadUrl: "#",
-        readTime: "Interactive",
-      },
-      {
-        title: "ROI Analysis Template",
-        description: "Excel template to analyze return on investment",
-        type: "Template",
-        downloadUrl: "#",
-        readTime: "Download",
-      },
-      {
-        title: "Cost Comparison Tool",
-        description: "Compare disposal costs vs. recycling revenue",
-        type: "Tool",
-        downloadUrl: "#",
-        readTime: "Interactive",
-      },
-    ],
+    name: "Double-Lined Kraft (DLK)",
+    description:
+      "New corrugated cuttings and offcuts from box plants and converters. Usually cleaner than OCC.",
   },
   {
-    title: "Market Intelligence",
-    description: "Stay informed about cardboard market trends and pricing",
-    icon: TrendingUp,
-    color: "bg-purple-500",
-    resources: [
-      {
-        title: "Monthly Market Report",
-        description: "Current cardboard commodity prices and market trends",
-        type: "Report",
-        downloadUrl: "#",
-        readTime: "10 min read",
-      },
-      {
-        title: "Price Forecast 2024",
-        description: "Expert predictions for cardboard market pricing",
-        type: "Analysis",
-        downloadUrl: "#",
-        readTime: "8 min read",
-      },
-      {
-        title: "Industry Trends",
-        description: "Latest developments in cardboard recycling industry",
-        type: "Insights",
-        downloadUrl: "#",
-        readTime: "6 min read",
-      },
-    ],
-  },
-  {
-    title: "Compliance & Documentation",
-    description: "Legal requirements and documentation for recycling programs",
-    icon: FileText,
-    color: "bg-orange-500",
-    resources: [
-      {
-        title: "Compliance Checklist",
-        description: "Ensure your recycling program meets all regulations",
-        type: "Checklist",
-        downloadUrl: "#",
-        readTime: "5 min read",
-      },
-      {
-        title: "Documentation Templates",
-        description: "Standard forms and certificates for record keeping",
-        type: "Templates",
-        downloadUrl: "#",
-        readTime: "Download",
-      },
-      {
-        title: "Environmental Impact Report",
-        description: "Template for measuring your environmental benefits",
-        type: "Template",
-        downloadUrl: "#",
-        readTime: "Download",
-      },
-    ],
+    name: "Mixed Paper",
+    description:
+      "Boxboard such as cereal and shoe boxes, office paper and other paper mixed together. Kept separate from corrugated where possible.",
   },
 ];
 
-const quickStats = [
+const doList = [
+  "Flatten boxes before baling",
+  "Remove plastic film, foam and packing peanuts",
+  "Keep bales dry and under cover",
+  "Make bales a consistent size and weight",
+  "Tie bales with the wire or strapping your baler is designed for",
+];
+
+const dontList = [
+  "Wax-coated boxes (often used for produce and meat)",
+  "Cardboard soaked with food, grease or oil",
+  "Wood pallets, metal or trash in the bale",
+  "Wet or moldy cardboard",
+];
+
+const balerTypes = [
   {
-    title: "Environmental Impact",
-    stats: [
-      { label: "CO2 Saved per Ton", value: "3.3 tons", icon: Leaf },
-      { label: "Trees Saved per Ton", value: "17 trees", icon: Leaf },
-      { label: "Energy Saved", value: "64% less", icon: Lightbulb },
-      { label: "Water Saved", value: "50% less", icon: Recycle },
-    ],
+    name: "Vertical Balers",
+    description:
+      "Compact, loaded from the front and common in retail stores and smaller warehouses. They suit lower to moderate volumes and limited floor space.",
   },
   {
-    title: "Financial Benefits",
-    stats: [
-      { label: "Average Revenue per Ton", value: "$85-120", icon: DollarSign },
-      { label: "Disposal Cost Savings", value: "$45-75", icon: TrendingUp },
-      { label: "Monthly ROI", value: "15-25%", icon: BarChart3 },
-      { label: "Payback Period", value: "2-4 months", icon: Calculator },
-    ],
+    name: "Horizontal Balers",
+    description:
+      "Larger machines, often fed by conveyor, used by distribution centers and plants with high volumes. They need more space and a bigger investment.",
+  },
+  {
+    name: "Compactors",
+    description:
+      "Compress cardboard into a container that is hauled away. An option when baling isn't practical.",
   },
 ];
 
-const featuredTools = [
-  {
-    title: "Revenue Calculator",
-    description:
-      "Calculate your potential monthly revenue from cardboard recycling",
-    icon: Calculator,
-    features: [
-      "Volume estimation",
-      "Market rate pricing",
-      "Monthly projections",
-      "ROI analysis",
-    ],
-    ctaText: "Launch Calculator",
-    ctaUrl: "#calculator",
-  },
-  {
-    title: "Sustainability Tracker",
-    description:
-      "Track and report your environmental impact and carbon footprint reduction",
-    icon: Leaf,
-    features: [
-      "CO2 reduction tracking",
-      "Environmental reports",
-      "Goal setting",
-      "Progress monitoring",
-    ],
-    ctaText: "Start Tracking",
-    ctaUrl: "#tracker",
-  },
-  {
-    title: "Market Insights Dashboard",
-    description: "Real-time cardboard commodity prices and market trends",
-    icon: TrendingUp,
-    features: [
-      "Live pricing data",
-      "Market forecasts",
-      "Price alerts",
-      "Industry news",
-    ],
-    ctaText: "View Dashboard",
-    ctaUrl: "#dashboard",
-  },
-];
-
-const educationalContent = [
-  {
-    title: "Cardboard Recycling Best Practices",
-    description:
-      "Learn industry best practices for maximum efficiency and revenue",
-    author: "Sustainability Team",
-    publishDate: "December 2024",
-    readTime: "8 min read",
-    tags: ["Best Practices", "Efficiency", "Quality"],
-  },
-  {
-    title: "Understanding Cardboard Grades",
-    description:
-      "Complete guide to different cardboard types and their recycling value",
-    author: "Operations Team",
-    publishDate: "November 2024",
-    readTime: "6 min read",
-    tags: ["Education", "Quality", "Pricing"],
-  },
-  {
-    title: "Maximizing Your Recycling Revenue",
-    description:
-      "Strategic approaches to increase revenue from your cardboard waste",
-    author: "Business Development",
-    publishDate: "November 2024",
-    readTime: "10 min read",
-    tags: ["Revenue", "Strategy", "Optimization"],
-  },
-  {
-    title: "Environmental Benefits of Cardboard Recycling",
-    description:
-      "The positive environmental impact of proper cardboard recycling",
-    author: "Environmental Team",
-    publishDate: "October 2024",
-    readTime: "7 min read",
-    tags: ["Environment", "Sustainability", "Impact"],
-  },
+const questions = [
+  "Do you buy my bales, collect them at no charge or charge for pickup?",
+  "How are bales weighed, and how is the price set?",
+  "What grade and condition do you accept?",
+  "How often can you pick up, and what access do your trucks need?",
+  "If I rent a baler, who handles installation, service and repairs?",
+  "What are the contract length and payment terms?",
 ];
 
 export default function ResourcesPage() {
@@ -266,306 +92,196 @@ export default function ResourcesPage() {
         <div className="container-max">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-              Recycling Resources & Tools
+              Cardboard Bale Recycling Guide
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              Access comprehensive guides, calculators, and tools to maximize
-              the value and impact of your cardboard recycling program.
+              Practical information on cardboard grades, making good bales,
+              choosing equipment and what to ask a recycler.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="#tools"
+                href="#grades"
                 className="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
               >
-                <Calculator className="w-5 h-5 inline mr-2" />
-                Explore Tools
+                <BookOpen className="w-5 h-5 inline mr-2" />
+                Start Reading
               </Link>
               <Link
-                href="#guides"
+                href="/quote"
                 className="border border-gray-300 hover:border-primary-500 text-gray-700 hover:text-primary-600 font-semibold py-3 px-8 rounded-lg transition-all duration-200"
               >
-                <BookOpen className="w-5 h-5 inline mr-2" />
-                Browse Guides
+                Get a Quote
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Quick Stats */}
+      {/* Grades */}
+      <section id="grades" className="py-16 lg:py-24">
+        <div className="container-max">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                Common Cardboard Grades
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Buyers sort recovered paper into grades. Keeping grades apart
+                makes your material easier to sell.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {grades.map((grade) => (
+                <div
+                  key={grade.name}
+                  className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100"
+                >
+                  <div className="flex items-center justify-center w-12 h-12 bg-primary-100 rounded-lg mb-4">
+                    <Layers className="w-6 h-6 text-primary-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                    {grade.name}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    {grade.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bale prep */}
+      <section className="py-16 lg:py-24 bg-gray-50">
+        <div className="container-max">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                Making a Clean Bale
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Clean, dry, consistent bales are easier to collect and sell.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">Do</h3>
+                <ul className="space-y-3">
+                  {doList.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-700">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  Keep Out of the Bale
+                </h3>
+                <ul className="space-y-3">
+                  {dontList.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                      <span className="text-gray-700">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Equipment */}
       <section className="py-16 lg:py-24">
         <div className="container-max">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Quick Reference Stats
+                Balers and Compactors
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Key metrics to help you understand the impact and value of
-                cardboard recycling
+                The right equipment depends on your volume and space. Partner
+                suppliers can advise on rental or lease options.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {quickStats.map((category, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {balerTypes.map((type) => (
                 <div
-                  key={index}
+                  key={type.name}
                   className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100"
                 >
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                    {category.title}
-                  </h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {category.stats.map((stat, idx) => (
-                      <div key={idx} className="text-center">
-                        <div className="flex items-center justify-center w-12 h-12 bg-primary-100 rounded-lg mx-auto mb-3">
-                          <stat.icon className="w-6 h-6 text-primary-600" />
-                        </div>
-                        <div className="text-2xl font-bold text-gray-900 mb-1">
-                          {stat.value}
-                        </div>
-                        <div className="text-sm text-gray-600">
-                          {stat.label}
-                        </div>
-                      </div>
-                    ))}
+                  <div className="flex items-center justify-center w-12 h-12 bg-primary-100 rounded-lg mb-4">
+                    <Wrench className="w-6 h-6 text-primary-600" />
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Tools */}
-      <section id="tools" className="py-16 lg:py-24 bg-gray-50">
-        <div className="container-max">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Featured Tools & Calculators
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Interactive tools to help you plan, optimize, and track your
-                recycling program
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {featuredTools.map((tool, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
-                >
-                  <div className="flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-6">
-                    <tool.icon className="w-8 h-8 text-primary-600" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    {tool.title}
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">
+                    {type.name}
                   </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {tool.description}
+                  <p className="text-gray-600 leading-relaxed">
+                    {type.description}
                   </p>
-
-                  <div className="space-y-2 mb-8">
-                    {tool.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-3">
-                        <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        <span className="text-gray-700 text-sm">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Link
-                    href={tool.ctaUrl}
-                    className="w-full bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 inline-flex items-center justify-center"
-                  >
-                    {tool.ctaText}
-                    <ExternalLink className="w-4 h-4 ml-2" />
-                  </Link>
                 </div>
               ))}
             </div>
+            <p className="text-sm text-gray-500 text-center mt-8">
+              Balers are powerful machines. Follow the manufacturer&apos;s
+              instructions and check current safety regulations for operating
+              them.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Resource Categories */}
-      <section id="guides" className="py-16 lg:py-24">
-        <div className="container-max">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Resource Library
-              </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Comprehensive guides, templates, and documents to support your
-                recycling program
-              </p>
-            </div>
-
-            <div className="space-y-12">
-              {resourceCategories.map((category, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100"
-                >
-                  <div className="flex items-center gap-4 mb-6">
-                    <div
-                      className={`flex items-center justify-center w-12 h-12 ${category.color} rounded-lg`}
-                    >
-                      <category.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-900">
-                        {category.title}
-                      </h3>
-                      <p className="text-gray-600">{category.description}</p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {category.resources.map((resource, idx) => (
-                      <div
-                        key={idx}
-                        className="bg-gray-50 rounded-xl p-6 hover:bg-gray-100 transition-colors duration-200"
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <span
-                            className={`inline-block text-xs font-semibold px-2 py-1 rounded ${category.color} text-white`}
-                          >
-                            {resource.type}
-                          </span>
-                          <Download className="w-4 h-4 text-gray-400" />
-                        </div>
-                        <h4 className="font-bold text-gray-900 mb-2">
-                          {resource.title}
-                        </h4>
-                        <p className="text-gray-600 text-sm mb-3 leading-relaxed">
-                          {resource.description}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-500">
-                            {resource.readTime}
-                          </span>
-                          <Link
-                            href={resource.downloadUrl}
-                            className="text-primary-600 hover:text-primary-700 font-semibold text-sm"
-                          >
-                            Access →
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Educational Content */}
+      {/* Questions */}
       <section className="py-16 lg:py-24 bg-gray-50">
         <div className="container-max">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Latest Articles & Insights
+                Questions to Ask a Recycler
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Stay informed with the latest trends, tips, and insights in
-                cardboard recycling
+              <p className="text-lg text-gray-600">
+                Useful to have answered before you agree to a quote.
               </p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {educationalContent.map((article, index) => (
-                <article
-                  key={index}
-                  className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
-                >
-                  <div className="flex items-center gap-2 mb-4">
-                    {article.tags.map((tag, idx) => (
-                      <span
-                        key={idx}
-                        className="inline-block bg-primary-50 text-primary-700 text-xs font-medium px-2 py-1 rounded"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                    {article.title}
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {article.description}
-                  </p>
-
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-6">
-                    <div className="flex items-center gap-4">
-                      <span>By {article.author}</span>
-                      <span>•</span>
-                      <span>{article.publishDate}</span>
-                    </div>
-                    <span>{article.readTime}</span>
-                  </div>
-
-                  <Link
-                    href="#"
-                    className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold"
-                  >
-                    Read Article
-                    <ExternalLink className="w-4 h-4" />
-                  </Link>
-                </article>
-              ))}
-            </div>
-
-            <div className="text-center mt-12">
-              <Link
-                href="#"
-                className="border border-gray-300 hover:border-primary-500 text-gray-700 hover:text-primary-600 font-semibold py-3 px-8 rounded-lg transition-all duration-200"
-              >
-                View All Articles
-              </Link>
+            <div className="bg-white rounded-2xl p-8 shadow-lg">
+              <ul className="space-y-4">
+                {questions.map((question) => (
+                  <li key={question} className="flex items-start gap-3">
+                    <HelpCircle className="w-5 h-5 text-primary-600 flex-shrink-0 mt-0.5" />
+                    <span className="text-gray-700">{question}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Support Section */}
+      {/* CTA Section */}
       <section className="py-16 lg:py-24">
         <div className="container-max">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <div className="bg-primary-50 rounded-2xl p-8 lg:p-12">
-              <div className="flex items-center justify-center w-16 h-16 bg-primary-500 rounded-full mx-auto mb-6">
-                <Users className="w-8 h-8 text-white" />
-              </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-                Need Additional Support?
+                Ready for a Quote?
               </h2>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Our team of recycling experts is here to help you optimize your
-                program and answer any questions you may have.
+                Send a free, no-obligation request and a partner supplier in
+                our network will follow up.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/quote"
-                  className="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
-                >
-                  <Calculator className="w-5 h-5 inline mr-2" />
-                  Get Consultation
-                </Link>
-                <a
-                  href="mailto:support@cardboardbalerecycling.com"
-                  className="border border-gray-300 hover:border-primary-500 text-gray-700 hover:text-primary-600 font-semibold py-3 px-8 rounded-lg transition-all duration-200"
-                >
-                  <ExternalLink className="w-5 h-5 inline mr-2" />
-                  Contact Support
-                </a>
-              </div>
+              <Link
+                href="/quote"
+                className="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl inline-block"
+              >
+                <Calculator className="w-5 h-5 inline mr-2" />
+                Request a Quote
+              </Link>
             </div>
           </div>
         </div>

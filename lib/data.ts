@@ -1,362 +1,126 @@
-import {
-  ServiceOffering,
-  TestimonialData,
-  FAQItem,
-  PricingTier,
-  MarketPricing,
-  ServiceArea,
-  ComplianceRequirement,
-  NationalAveragePrice,
-} from "@/types";
+import { ServiceOffering, FAQItem, ServiceArea } from "@/types";
 
+// Every service below is provided by partner suppliers in our network, not by
+// this site. Cardboard Bale Recycling is a referral service.
 export const serviceOfferings: ServiceOffering[] = [
   {
     id: "bale-collection",
-    title: "Cardboard Bale Collection",
+    title: "Cardboard Bale Pickup",
     description:
-      "Regular pickup scheduling with flexible routes and timing to fit your business needs.",
+      "Pickup of baled cardboard (OCC) from your business, arranged through a partner recycler in our network.",
     features: [
-      "Flexible pickup schedules",
-      "Professional drivers and equipment",
-      "Real-time tracking and notifications",
-      "Minimal business disruption",
+      "Scheduled or on-call pickup, depending on the partner",
+      "Suits retail, warehouse, manufacturing and distribution sites",
+      "Pickup frequency based on your volume and storage space",
+      "Availability depends on partner suppliers in your area",
     ],
     benefits: [
-      "Reduce storage costs",
-      "Improve facility cleanliness",
-      "Ensure regular waste removal",
-      "Professional service guarantee",
+      "Frees up dock and storage space",
+      "Keeps cardboard out of your trash containers",
+      "One request reaches partner recyclers",
     ],
     icon: "Truck",
   },
   {
-    id: "bale-processing",
-    title: "Bale Processing",
+    id: "sell-bales",
+    title: "Sell Your Cardboard Bales",
     description:
-      "Expert sorting, cleaning, and preparation of cardboard bales for maximum market value.",
+      "Request a quote from partner buyers for your baled cardboard. Clean, dry, well-made bales are easier to sell.",
     features: [
-      "Quality grading and assessment",
-      "Contamination removal",
-      "Proper bale preparation",
-      "Market-ready packaging",
+      "Pricing by quote from partner buyers",
+      "Price depends on grade, bale weight, volume and the current market",
+      "Partner sets payment terms and weighing method",
+      "Free, no-obligation quote request",
     ],
     benefits: [
-      "Maximize bale value",
-      "Meet buyer specifications",
-      "Reduce contamination costs",
-      "Increase revenue potential",
-    ],
-    icon: "Settings",
-  },
-  {
-    id: "revenue-sharing",
-    title: "Revenue Sharing",
-    description:
-      "Competitive pricing and transparent payment terms that turn your waste into income.",
-    features: [
-      "Market-competitive rates",
-      "Transparent pricing structure",
-      "Regular payment schedules",
-      "Detailed revenue reporting",
-    ],
-    benefits: [
-      "Generate revenue from waste",
-      "Predictable income stream",
-      "Offset disposal costs",
-      "Improve bottom line",
+      "Can offset part of your disposal costs",
+      "Compare what a partner offers before you commit",
     ],
     icon: "DollarSign",
   },
   {
-    id: "compliance",
-    title: "Compliance & Documentation",
+    id: "loose-cardboard",
+    title: "Loose Cardboard Pickup",
     description:
-      "Complete environmental regulations compliance with proper documentation and reporting.",
+      "No baler yet? Some partner recyclers collect loose or flattened cardboard, usually in a container or cart.",
     features: [
-      "Regulatory compliance management",
-      "Proper documentation",
-      "Environmental reporting",
-      "Audit trail maintenance",
+      "Container or cart service where a partner offers it",
+      "Good fit for lower volumes",
+      "A step toward baling as your volume grows",
     ],
     benefits: [
-      "Avoid compliance violations",
-      "Reduce regulatory risk",
-      "Streamline audits",
-      "Maintain clean records",
+      "No equipment needed to start recycling",
+      "Simple way to separate cardboard from trash",
     ],
-    icon: "Shield",
+    icon: "Settings",
   },
   {
     id: "equipment-rental",
-    title: "Equipment Rental",
+    title: "Baler and Compactor Rental",
     description:
-      "Professional balers and compaction equipment to optimize your cardboard waste management.",
+      "Ask about renting or leasing a vertical baler or compactor through a partner supplier.",
     features: [
-      "High-quality baling equipment",
-      "Installation and training",
-      "Maintenance and support",
-      "Flexible rental terms",
+      "Vertical and horizontal balers, where available",
+      "Partner supplier sets rental terms, installation and service",
+      "Sized to your monthly cardboard volume",
     ],
     benefits: [
-      "Increase bale density",
-      "Reduce storage space",
-      "Improve efficiency",
-      "Lower operational costs",
+      "Denser bales take less space",
+      "Baled cardboard is easier to transport and sell",
     ],
     icon: "Wrench",
   },
 ];
 
-export const testimonials: TestimonialData[] = [
-  {
-    id: "retail-chain",
-    name: "Michael Rodriguez",
-    company: "Metro Retail Solutions",
-    role: "Operations Manager",
-    content:
-      "Switching to cardboard bale recycling has saved us over $15,000 annually in disposal costs while generating additional revenue. The pickup service is reliable and professional.",
-    rating: 5,
-    location: "Los Angeles, CA",
-  },
-  {
-    id: "manufacturing",
-    name: "Sarah Chen",
-    company: "Pacific Manufacturing Co.",
-    role: "Sustainability Director",
-    content:
-      "The compliance support and documentation has been invaluable for our environmental reporting. We now meet all regulations while actually making money from our cardboard waste.",
-    rating: 5,
-    location: "Seattle, WA",
-  },
-  {
-    id: "warehouse",
-    name: "David Thompson",
-    company: "Central Distribution Hub",
-    role: "Facility Manager",
-    content:
-      "The equipment rental program transformed our waste management. The baler pays for itself and the revenue sharing makes this a true win-win partnership.",
-    rating: 5,
-    location: "Chicago, IL",
-  },
-  {
-    id: "grocery",
-    name: "Lisa Martinez",
-    company: "Fresh Foods Markets",
-    role: "Store Operations Manager",
-    content:
-      "Consistent pickup schedules and competitive pricing have made cardboard recycling a profitable part of our operations. Highly recommend their services.",
-    rating: 5,
-    location: "Houston, TX",
-  },
-];
-
 export const faqItems: FAQItem[] = [
   {
-    id: "how-pricing-works",
-    question: "How does the pricing for cardboard bales work?",
+    id: "who-we-are",
+    question: "Who will handle my request?",
     answer:
-      "Our pricing is based on current market rates and varies by cardboard grade, bale quality, and volume. We offer competitive rates typically ranging from $80-120 per ton, with pricing updated monthly based on market conditions. Higher quality bales and larger volumes receive premium pricing.",
+      "Cardboard Bale Recycling is a referral service. We pass your request to partner recyclers and suppliers in our network, and a partner follows up with you directly. The partner sets prices, schedules and terms.",
+    category: "general",
+  },
+  {
+    id: "how-pricing-works",
+    question: "How is cardboard bale pricing set?",
+    answer:
+      "Pricing is by quote from partner buyers. It depends on the grade of the cardboard, how clean and dry the bales are, bale weight and density, your volume, your location and the current market for recovered paper, which changes over time.",
     category: "pricing",
   },
   {
     id: "pickup-frequency",
-    question: "How often can you pick up our cardboard bales?",
+    question: "How often can cardboard be picked up?",
     answer:
-      "We offer flexible pickup schedules including weekly, bi-weekly, and monthly options. The frequency depends on your volume generation and storage capacity. We can also provide on-demand pickups for large accumulations.",
+      "That depends on your volume, your storage space and what a partner in your area offers. Weekly, every other week, monthly or on-call pickups are common arrangements.",
     category: "process",
   },
   {
     id: "minimum-volume",
-    question: "Is there a minimum volume requirement?",
+    question: "Is there a minimum volume?",
     answer:
-      "We work with businesses of all sizes. While there is no strict minimum, we typically require at least 2-3 bales per pickup to make service economically viable. Smaller generators can coordinate with nearby businesses for combined pickups.",
+      "Each partner sets its own minimums. Many buyers prefer a full load of bales, so lower volumes are often better served by loose cardboard pickup. Tell us your monthly volume and we will pass it on.",
     category: "general",
   },
   {
     id: "bale-quality",
-    question: "What quality standards do you require for cardboard bales?",
+    question: "What makes a good cardboard bale?",
     answer:
-      "We accept Grade A (clean, dry corrugated), Grade B (slightly contaminated), and Grade C (mixed cardboard) bales. Clean, dry bales without contamination receive the highest pricing. We provide detailed grading guidelines to help maximize your revenue.",
+      "Clean, dry corrugated cardboard (OCC) with little plastic film, foam, wood or food waste mixed in. Wet or contaminated bales are harder to sell and may be priced lower or refused. Tightly packed bales of a consistent size are easier to handle.",
     category: "process",
   },
   {
-    id: "payment-terms",
-    question: "What are your payment terms?",
-    answer:
-      "We typically pay within 30 days of pickup and processing. Payment can be made via check or ACH transfer. We provide detailed invoices showing bale weights, grades, and pricing for complete transparency.",
-    category: "pricing",
-  },
-  {
-    id: "compliance-support",
-    question: "Do you provide compliance documentation?",
-    answer:
-      "Yes, we provide complete documentation including certificates of destruction, weight tickets, and environmental compliance reports. This documentation supports your sustainability reporting and regulatory compliance requirements.",
-    category: "compliance",
-  },
-  {
     id: "equipment-needs",
-    question: "Do I need my own baling equipment?",
+    question: "Do I need my own baler?",
     answer:
-      "Not necessarily. We offer equipment rental programs including balers and compactors. We can also pick up loose cardboard, though baled material typically receives better pricing due to transportation efficiency.",
+      "No. Some partners pick up loose cardboard, and you can also ask about renting or leasing a baler through a partner supplier. Baled cardboard is usually easier to transport and sell.",
     category: "general",
   },
   {
     id: "service-areas",
-    question: "What areas do you serve?",
+    question: "Which areas do you cover?",
     answer:
-      "We provide nationwide coverage across all 50 US states, with extensive operations in major metropolitan areas. Our network includes processing facilities and pickup routes in every state, ensuring reliable service no matter where your business is located.",
+      "We accept requests from businesses across the United States. Whether a pickup or purchase is available depends on partner suppliers near you.",
     category: "general",
-  },
-];
-
-export const stateCardboardPricing = [
-  {
-    state: "California",
-    abbreviation: "CA",
-    priceRange: { min: 85, max: 120 },
-    marketTrend: "up" as const,
-    lastUpdated: "2024-01-15",
-    majorCities: ["Los Angeles", "San Francisco", "San Diego"],
-    notes: "High demand from Pacific Rim markets",
-  },
-  {
-    state: "Texas",
-    abbreviation: "TX",
-    priceRange: { min: 75, max: 110 },
-    marketTrend: "stable" as const,
-    lastUpdated: "2024-01-15",
-    majorCities: ["Houston", "Dallas", "Austin", "San Antonio"],
-    notes: "Strong manufacturing base drives demand",
-  },
-  {
-    state: "Florida",
-    abbreviation: "FL",
-    priceRange: { min: 70, max: 105 },
-    marketTrend: "up" as const,
-    lastUpdated: "2024-01-15",
-    majorCities: ["Miami", "Orlando", "Tampa", "Jacksonville"],
-    notes: "Growing export market through ports",
-  },
-  {
-    state: "New York",
-    abbreviation: "NY",
-    priceRange: { min: 80, max: 115 },
-    marketTrend: "stable" as const,
-    lastUpdated: "2024-01-15",
-    majorCities: ["New York City", "Buffalo", "Rochester", "Syracuse"],
-    notes: "High population density creates steady supply",
-  },
-  {
-    state: "Illinois",
-    abbreviation: "IL",
-    priceRange: { min: 75, max: 110 },
-    marketTrend: "down" as const,
-    lastUpdated: "2024-01-15",
-    majorCities: ["Chicago", "Rockford", "Peoria"],
-    notes: "Transportation hub with good logistics",
-  },
-  {
-    state: "Pennsylvania",
-    abbreviation: "PA",
-    priceRange: { min: 75, max: 110 },
-    marketTrend: "stable" as const,
-    lastUpdated: "2024-01-15",
-    majorCities: ["Philadelphia", "Pittsburgh", "Allentown"],
-    notes: "Established recycling infrastructure",
-  },
-  {
-    state: "Ohio",
-    abbreviation: "OH",
-    priceRange: { min: 70, max: 105 },
-    marketTrend: "stable" as const,
-    lastUpdated: "2024-01-15",
-    majorCities: ["Columbus", "Cleveland", "Cincinnati"],
-    notes: "Central location benefits distribution",
-  },
-  {
-    state: "Georgia",
-    abbreviation: "GA",
-    priceRange: { min: 75, max: 110 },
-    marketTrend: "up" as const,
-    lastUpdated: "2024-01-15",
-    majorCities: ["Atlanta", "Savannah", "Augusta"],
-    notes: "Growing export market via Savannah port",
-  },
-];
-
-export const nationalAveragePrice: NationalAveragePrice = {
-  averagePrice: 95,
-  priceRange: { min: 70, max: 120 },
-  trend: "stable" as const,
-  description:
-    "National average cardboard bale price varies by location, quality, and market conditions.",
-  lastUpdated: "2024-01-15",
-  factors: [
-    "Material quality and contamination levels",
-    "Bale density and preparation",
-    "Local market demand",
-    "Transportation costs",
-    "Volume commitments",
-  ],
-};
-
-export const serviceVolumeTiers = [
-  {
-    id: "small",
-    name: "Small Business",
-    description: "Perfect for small retailers and offices",
-    volumeRange: "2-10 tons/month",
-    features: [
-      "Monthly pickup schedule",
-      "Basic reporting",
-      "Standard payment terms (30 days)",
-      "Email support",
-      "Market rate pricing",
-    ],
-    benefits: [
-      "No minimum volume requirements",
-      "Flexible scheduling",
-      "Simple setup process",
-    ],
-  },
-  {
-    id: "medium",
-    name: "Medium Business",
-    description: "Ideal for growing businesses and warehouses",
-    volumeRange: "10-50 tons/month",
-    features: [
-      "Weekly or bi-weekly pickup",
-      "Detailed reporting and analytics",
-      "Priority payment terms (15 days)",
-      "Phone and email support",
-      "Premium rate pricing",
-      "Equipment rental available",
-    ],
-    benefits: [
-      "Dedicated account manager",
-      "Volume-based rate premiums",
-      "Customizable pickup schedules",
-    ],
-  },
-  {
-    id: "large",
-    name: "Enterprise",
-    description: "For large operations and multiple locations",
-    volumeRange: "50+ tons/month",
-    features: [
-      "Custom pickup schedules",
-      "Real-time tracking and reporting",
-      "Express payment terms (7 days)",
-      "Dedicated account management",
-      "Premium rate pricing",
-      "Free equipment rental",
-      "Compliance documentation",
-    ],
-    benefits: [
-      "Highest rates and priority service",
-      "Multi-location coordination",
-      "Custom reporting and analytics",
-    ],
   },
 ];
 
@@ -610,47 +374,5 @@ export const serviceAreas: ServiceArea[] = [
     state: "Wyoming",
     cities: ["Cheyenne", "Casper", "Laramie"],
     active: true,
-  },
-];
-
-export const complianceRequirements: ComplianceRequirement[] = [
-  {
-    id: "epa-reporting",
-    title: "EPA Waste Reporting",
-    description:
-      "Federal requirements for waste tracking and environmental impact reporting.",
-    applicableStates: ["All"],
-    required: true,
-    documentation: [
-      "Waste manifests",
-      "Transportation records",
-      "Processing certificates",
-    ],
-  },
-  {
-    id: "state-permits",
-    title: "State Waste Management Permits",
-    description:
-      "State-specific permits and licenses for waste collection and processing.",
-    applicableStates: ["California", "New York", "Texas", "Florida"],
-    required: true,
-    documentation: [
-      "Permit applications",
-      "Annual renewals",
-      "Compliance reports",
-    ],
-  },
-  {
-    id: "dot-regulations",
-    title: "DOT Transportation Compliance",
-    description:
-      "Department of Transportation regulations for waste material transport.",
-    applicableStates: ["All"],
-    required: true,
-    documentation: [
-      "Driver certifications",
-      "Vehicle inspections",
-      "Route documentation",
-    ],
   },
 ];
