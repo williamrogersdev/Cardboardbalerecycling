@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { Recycle, Mail, MapPin, Clock } from "lucide-react";
+import { Recycle, MapPin, FileText } from "lucide-react";
 
 const footerNavigation = {
   services: [
-    { name: "Cardboard Bale Collection", href: "/services" },
-    { name: "Bale Processing", href: "/services" },
-    { name: "Revenue Sharing", href: "/services" },
-    { name: "Equipment Rental", href: "/services" },
-    { name: "Compliance Support", href: "/services" },
+    { name: "Cardboard Bale Pickup", href: "/services" },
+    { name: "Sell Cardboard Bales", href: "/services" },
+    { name: "Loose Cardboard Pickup", href: "/services" },
+    { name: "Baler Rental", href: "/services" },
   ],
   company: [
     { name: "How It Works", href: "/how-it-works" },
@@ -17,9 +16,9 @@ const footerNavigation = {
     { name: "Get Quote", href: "/quote" },
   ],
   legal: [
-    { name: "Service Areas", href: "/service-areas" },
+    { name: "Privacy Policy", href: "/privacy-policy" },
+    { name: "Terms", href: "/terms" },
     { name: "Contact Us", href: "/quote" },
-    { name: "About", href: "/#about" },
   ],
 };
 
@@ -40,34 +39,32 @@ export function Footer() {
                     Cardboard Bale Recycling
                   </div>
                   <div className="text-sm text-gray-300">
-                    Turn Your Waste Into Revenue
+                    Cardboard recycling requests
                   </div>
                 </div>
               </Link>
 
               <p className="text-gray-300 mb-6 max-w-md">
-                Professional cardboard bale recycling services helping
-                businesses nationwide turn their waste into revenue while
-                supporting environmental sustainability.
+                Request cardboard bale pickup, bale sales and baler rental.
+                Requests go to partner recyclers and suppliers in our network.
               </p>
 
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-gray-300">
-                  <Mail className="w-4 h-4 text-primary-400" />
-                  <a
-                    href="mailto:support@cardboardbalerecycling.com"
+                  <FileText className="w-4 h-4 text-primary-400" />
+                  <Link
+                    href="/quote"
                     className="hover:text-white transition-colors"
                   >
-                    support@cardboardbalerecycling.com
-                  </a>
+                    Contact us through the quote form
+                  </Link>
                 </div>
                 <div className="flex items-center gap-2 text-gray-300">
                   <MapPin className="w-4 h-4 text-primary-400" />
-                  <span>Serving 25+ States Nationwide</span>
-                </div>
-                <div className="flex items-center gap-2 text-gray-300">
-                  <Clock className="w-4 h-4 text-primary-400" />
-                  <span>Mon-Fri: 8AM-6PM EST</span>
+                  <span>
+                    Requests from across the US; availability depends on
+                    partner suppliers
+                  </span>
                 </div>
               </div>
             </div>
@@ -117,9 +114,15 @@ export function Footer() {
           {/* Bottom Bar */}
           <div className="border-t border-gray-800 mt-12 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="text-gray-400 text-sm">
-                © {new Date().getFullYear()} Cardboard Bale Recycling. All
-                rights reserved.
+              <div className="text-gray-400 text-sm text-center md:text-left">
+                <div>
+                  © {new Date().getFullYear()} Cardboard Bale Recycling. All
+                  rights reserved.
+                </div>
+                <div className="mt-1">
+                  Cardboard Bale Recycling is a referral service. Quotes are
+                  fulfilled by partner suppliers in our network.
+                </div>
               </div>
 
               <div className="flex gap-6">

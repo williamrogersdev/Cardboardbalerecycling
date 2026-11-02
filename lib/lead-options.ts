@@ -15,8 +15,8 @@ export interface ServiceOption {
   productLabel?: string;
 }
 
-// The site picks up and pays for cardboard ($70-120 per ton), baled or loose,
-// and rents balers and compactors. One choice carries both the lead type and the
+// Visitors request pickup or a purchase quote for cardboard, baled or loose,
+// or ask about baler and compactor rental (all through partner suppliers). One choice carries both the lead type and the
 // product, so a lead can never pair "rent a baler" with "cardboard bales".
 export const serviceOptions: ServiceOption[] = [
   {

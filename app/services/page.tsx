@@ -8,20 +8,50 @@ import { serviceOfferings } from "@/lib/data";
 import { ServiceJsonLd } from "@/components/seo/json-ld";
 
 export const metadata: Metadata = {
-  title: "Cardboard Recycling Services - Collection, Processing & Revenue Sharing",
+  title: "Cardboard Recycling Services - Bale Pickup, Bale Sales & Baler Rental",
   description:
-    "Comprehensive cardboard bale recycling services paying $70-$120/ton. Includes collection, processing, revenue sharing, compliance support, and equipment rental. Free quotes available.",
+    "Request cardboard bale pickup, sell baled cardboard, arrange loose cardboard pickup or ask about baler rental. Partner suppliers in our network prepare the quotes.",
   keywords: [
     "cardboard bale collection",
-    "cardboard processing",
-    "revenue sharing recycling",
+    "sell cardboard bales",
+    "loose cardboard pickup",
     "baler rental",
-    "compliance support",
     "cardboard recycling services",
     "commercial recycling",
     "OCC recycling services",
   ],
+  alternates: { canonical: "/services" },
 };
+
+const industries = [
+  {
+    title: "Retail & Grocery",
+    points: [
+      "Cardboard from deliveries and displays",
+      "Vertical balers suit back-of-store space",
+      "Pickup timed around store deliveries",
+    ],
+    note: "A common fit for stores with steady cardboard from incoming shipments.",
+  },
+  {
+    title: "Manufacturing",
+    points: [
+      "Larger volumes from packaging and shipping",
+      "Horizontal balers for high volumes",
+      "Bales sold to partner buyers by quote",
+    ],
+    note: "For plants that generate cardboard from inbound materials and outbound packaging.",
+  },
+  {
+    title: "Warehousing & Distribution",
+    points: [
+      "Volumes that rise and fall with the season",
+      "Several pickup points on one site",
+      "Pickup frequency matched to your volume",
+    ],
+    note: "For distribution centers where cardboard builds up quickly at the docks.",
+  },
+];
 
 export default function ServicesPage() {
   return (
@@ -29,15 +59,15 @@ export default function ServicesPage() {
       <ServiceJsonLd />
       {/* Hero Section */}
       <HeroSection
-        subtitle="🚛 Full-Service Solutions"
-        title="Complete Cardboard Recycling Services"
-        description="From collection to cash, we provide end-to-end cardboard bale recycling services that maximize your revenue while minimizing your environmental impact."
+        subtitle="🚛 Through Partner Suppliers"
+        title="Cardboard Recycling Services"
+        description="Pickup for baled or loose cardboard, quotes for selling your bales and baler rental, all available through partner recyclers and suppliers in our network."
         primaryCta={{
           text: "Get Service Quote",
           href: "/quote",
         }}
         secondaryCta={{
-          text: "View Pricing",
+          text: "How Pricing Works",
           href: "/pricing",
         }}
       />
@@ -47,12 +77,12 @@ export default function ServicesPage() {
         <div className="container-max">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need for Successful Recycling
+              What You Can Request
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our comprehensive service portfolio covers every aspect of
-              cardboard bale recycling, ensuring maximum efficiency and
-              profitability for your business.
+              Cardboard Bale Recycling is a referral service. Each service below
+              is provided by a partner supplier in our network, which sets its
+              own prices, schedules and terms.
             </p>
           </div>
 
@@ -76,61 +106,42 @@ export default function ServicesPage() {
         <div className="container-max">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Proven Process
+              How a Request Works
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              A streamlined approach that maximizes value and minimizes hassle.
+              From your request to a partner&apos;s quote.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="flex items-center justify-center w-16 h-16 bg-primary-500 text-white rounded-full mx-auto mb-4 font-bold text-xl">
-                1
+            {[
+              {
+                title: "Request",
+                text: "Tell us your cardboard volume, location and what you need.",
+              },
+              {
+                title: "Match",
+                text: "We pass your request to partner suppliers that serve your area.",
+              },
+              {
+                title: "Quote",
+                text: "A partner supplier follows up to confirm details and prepare a quote.",
+              },
+              {
+                title: "Decide",
+                text: "You review the partner's price, schedule and terms before anything is agreed.",
+              },
+            ].map((step, index) => (
+              <div key={step.title} className="text-center">
+                <div className="flex items-center justify-center w-16 h-16 bg-primary-500 text-white rounded-full mx-auto mb-4 font-bold text-xl">
+                  {index + 1}
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">
+                  {step.title}
+                </h3>
+                <p className="text-gray-600">{step.text}</p>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
-                Assessment
-              </h3>
-              <p className="text-gray-600">
-                We evaluate your cardboard waste volume, quality, and logistics
-                requirements.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="flex items-center justify-center w-16 h-16 bg-primary-500 text-white rounded-full mx-auto mb-4 font-bold text-xl">
-                2
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Setup</h3>
-              <p className="text-gray-600">
-                Custom pickup schedule, equipment installation (if needed), and
-                team training.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="flex items-center justify-center w-16 h-16 bg-primary-500 text-white rounded-full mx-auto mb-4 font-bold text-xl">
-                3
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">
-                Collection
-              </h3>
-              <p className="text-gray-600">
-                Regular pickup by professional drivers with real-time tracking
-                and reporting.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="flex items-center justify-center w-16 h-16 bg-primary-500 text-white rounded-full mx-auto mb-4 font-bold text-xl">
-                4
-              </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">Payment</h3>
-              <p className="text-gray-600">
-                Processing, grading, and payment within 30 days with detailed
-                reporting.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -140,139 +151,31 @@ export default function ServicesPage() {
         <div className="container-max">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Industry-Specific Solutions
+              Common Business Types
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Tailored recycling programs for different business types and
-              industries.
+              Cardboard recycling looks different depending on how much you
+              generate and how much space you have.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-gray-50 rounded-xl p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Retail & Grocery
-              </h3>
-              <ul className="space-y-2 mb-6">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary-600" />
-                  <span className="text-gray-700">Daily pickup options</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary-600" />
-                  <span className="text-gray-700">Compact baler rental</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary-600" />
-                  <span className="text-gray-700">
-                    Store-specific scheduling
-                  </span>
-                </li>
-              </ul>
-              <p className="text-gray-600 text-sm">
-                Perfect for retailers with consistent cardboard volumes from
-                shipments and displays.
-              </p>
-            </div>
-
-            <div className="bg-gray-50 rounded-xl p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Manufacturing
-              </h3>
-              <ul className="space-y-2 mb-6">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary-600" />
-                  <span className="text-gray-700">Large volume handling</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary-600" />
-                  <span className="text-gray-700">Industrial balers</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary-600" />
-                  <span className="text-gray-700">
-                    Compliance documentation
-                  </span>
-                </li>
-              </ul>
-              <p className="text-gray-600 text-sm">
-                Designed for manufacturers with high-volume cardboard waste from
-                packaging and shipping.
-              </p>
-            </div>
-
-            <div className="bg-gray-50 rounded-xl p-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
-                Warehousing & Distribution
-              </h3>
-              <ul className="space-y-2 mb-6">
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary-600" />
-                  <span className="text-gray-700">Flexible scheduling</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary-600" />
-                  <span className="text-gray-700">Multiple pickup points</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-primary-600" />
-                  <span className="text-gray-700">Volume-based pricing</span>
-                </li>
-              </ul>
-              <p className="text-gray-600 text-sm">
-                Optimized for distribution centers with fluctuating volumes and
-                multiple locations.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Service Guarantees */}
-      <section className="section-padding bg-primary-50">
-        <div className="container-max">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Service Guarantees
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We stand behind our services with industry-leading commitments.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="bg-white rounded-lg p-6 card-shadow">
-                <div className="text-2xl font-bold text-primary-600 mb-2">
-                  24hr
-                </div>
-                <div className="text-sm text-gray-600">Response Time</div>
+            {industries.map((industry) => (
+              <div key={industry.title} className="bg-gray-50 rounded-xl p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  {industry.title}
+                </h3>
+                <ul className="space-y-2 mb-6">
+                  {industry.points.map((point) => (
+                    <li key={point} className="flex items-center gap-2">
+                      <CheckCircle className="w-4 h-4 text-primary-600 flex-shrink-0" />
+                      <span className="text-gray-700">{point}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-gray-600 text-sm">{industry.note}</p>
               </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white rounded-lg p-6 card-shadow">
-                <div className="text-2xl font-bold text-primary-600 mb-2">
-                  99%
-                </div>
-                <div className="text-sm text-gray-600">On-Time Pickup</div>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white rounded-lg p-6 card-shadow">
-                <div className="text-2xl font-bold text-primary-600 mb-2">
-                  30 Day
-                </div>
-                <div className="text-sm text-gray-600">Payment Terms</div>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white rounded-lg p-6 card-shadow">
-                <div className="text-2xl font-bold text-primary-600 mb-2">
-                  100%
-                </div>
-                <div className="text-sm text-gray-600">Compliance</div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -283,12 +186,11 @@ export default function ServicesPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Start Your Recycling Program Today
+                Start Your Recycling Program
               </h2>
               <p className="text-xl text-gray-600 mb-8">
-                Join thousands of businesses already benefiting from our
-                comprehensive cardboard recycling services. Get started with a
-                free assessment and custom quote.
+                Send a free, no-obligation request. A partner supplier in our
+                network follows up to discuss pickup, pricing and equipment.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
@@ -305,7 +207,7 @@ export default function ServicesPage() {
             <div>
               <ContactForm
                 title="Request Service Information"
-                description="Tell us about your business and we'll recommend the best recycling solution for your needs."
+                description="Tell us about your business and a partner supplier will follow up."
               />
             </div>
           </div>

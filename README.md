@@ -1,6 +1,6 @@
 # Cardboard Bale Recycling Website
 
-A comprehensive lead generation and SEO-focused website for cardboard bale recycling services.
+Lead generation site for cardboard bale recycling requests. The site is a referral service: requests go through 1DB to partner suppliers, who prepare the quotes.
 
 ## Features
 
@@ -8,15 +8,14 @@ A comprehensive lead generation and SEO-focused website for cardboard bale recyc
 - 🔍 **SEO Optimized**: State and city-specific pages for local search
 - 📱 **Responsive Design**: Mobile-first approach with modern UI
 - ⚡ **Performance**: Optimized with Next.js static generation
-- ♻️ **Eco-Friendly**: Focus on sustainability and environmental benefits
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 with App Router
+- **Framework**: Next.js 16 with App Router
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
 - **Icons**: Lucide React
-- **Forms**: React Hook Form with Web3Forms integration
+- **Forms**: React Hook Form, posting to the site's own `/api/leads` route
 - **Deployment**: Vercel-ready
 
 ## Getting Started
@@ -44,7 +43,7 @@ app/
 ├── services/
 │   └── page.tsx               # Services Overview
 ├── pricing/
-│   └── page.tsx               # Pricing & Market Data
+│   └── page.tsx               # How pricing works (by quote)
 ├── how-it-works/
 │   └── page.tsx               # Process Explanation
 ├── quote/
@@ -72,17 +71,15 @@ app/
 
 ### Content Strategy
 
-- Comprehensive FAQ sections
-- Real-time pricing information
-- Industry-specific guides
-- Environmental compliance information
+- FAQ section on the home page
+- How pricing works (no published prices)
+- Practical guides: grades, bale preparation, balers
 
 ## Lead Generation
 
-- **Web3Forms Integration**: Secure form handling
-- **Multiple CTAs**: Quote requests and pickup scheduling
-- **Value Propositions**: Cost savings and revenue generation
-- **Trust Signals**: Certifications and testimonials
+- **Server route**: forms post to `/api/leads`, which sends the lead to 1DB
+- **Multiple CTAs**: quote requests on most pages
+- **Content rules**: no addresses, phone numbers, prices, testimonials, ratings or unverified claims; the footer states that the site is a referral service
 
 ## Performance
 
@@ -114,8 +111,8 @@ npm run build
 ## Brand Guidelines
 
 - **Colors**: Eco green (#16a34a), recycling blue (#0ea5e9), earth brown (#a3a3a3)
-- **Style**: Professional, eco-friendly, trust-building
-- **Tone**: Environmental, reliable, cost-saving focused
+- **Style**: Clean and practical
+- **Tone**: Plain and factual; describe services as provided by partner suppliers
 
 ## License
 
