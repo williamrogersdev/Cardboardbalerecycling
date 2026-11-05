@@ -34,6 +34,7 @@ const ATTRIBUTION_KEYS = [
   "msclkid",
   "ttclid",
   "ga_client_id",
+  "posthog_distinct_id",
 ];
 
 // 1DB names a bad field by its own key; the forms know it by this name.

@@ -2,6 +2,11 @@
 // this site's own /api/leads (which holds the 1DB key on the server). The
 // route renames the attribution keys below to 1DB's own names.
 
+import { captureLeadSubmitted, posthogDistinctId } from "./lead-analytics";
+
+// The form slug 1DB knows this site's leads by (the route's FORM_SLUG)
+const LEAD_FORM_SLUG = "cardboard-bale-recycling-contact";
+
 const UTM_PARAMS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
 const CLICK_ID_PARAMS = ["gclid", "gbraid", "wbraid", "fbclid", "msclkid", "ttclid"];
 const ATTRIBUTION_STORAGE_KEY = "cbr_lead_attribution";
@@ -68,10 +73,12 @@ export async function sendLead(
   attribution: Record<string, string>,
 ): Promise<LeadResult> {
   const ga = gaClientId();
+  const posthogId = posthogDistinctId();
   const body = JSON.stringify({
     ...values,
     ...attribution,
     ...(ga ? { ga_client_id: ga } : {}),
+    ...(posthogId ? { posthog_distinct_id: posthogId } : {}),
     current_page: window.location.href,
     pageUrl: window.location.href,
     submission_id: submissionId,
@@ -93,7 +100,10 @@ export async function sendLead(
     if (response.status < 500 || response.status === 503) break;
   }
 
-  if (response?.ok) return { kind: "ok" };
+  if (response?.ok) {
+    captureLeadSubmitted(submissionId, LEAD_FORM_SLUG);
+    return { kind: "ok" };
+  }
   if (response?.status === 429) return { kind: "too-many" };
   if (response?.status === 400) {
     const data: { fields?: Record<string, string> } = await response.json().catch(() => ({}));

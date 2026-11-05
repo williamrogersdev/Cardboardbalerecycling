@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { HomePageJsonLd } from "@/components/seo/json-ld";
 import { LeadAttribution } from "@/components/lead-attribution";
+import { POSTHOG_SNIPPET } from "@/lib/posthog-snippet";
 
 // Self-hosted at build time, so visitors make no request to Google Fonts.
 const inter = Inter({
@@ -100,6 +101,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <HomePageJsonLd />
       </head>
       <body className="min-h-screen bg-white text-gray-900 antialiased">
+        {/* PostHog through /ingest on this domain (1DB site_analytics.md) */}
+        <script data-posthog="injected" dangerouslySetInnerHTML={{ __html: POSTHOG_SNIPPET }} />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
